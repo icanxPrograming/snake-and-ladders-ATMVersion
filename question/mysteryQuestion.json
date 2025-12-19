@@ -1,0 +1,226 @@
+{
+  "difficulty": "mystery",
+
+  "true_false": [
+    {
+      "id": "M-TF-01",
+      "question": "Seorang detektif melempar satu koin untuk membuka pintu rahasia. Peluang pintu terbuka adalah 1/2.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-02",
+      "question": "Dalam sebuah ruangan misteri, sebuah dadu dilempar. Peluang muncul angka 7 adalah 1/6.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-03",
+      "question": "Kotak teka-teki berisi 4 bola hitam dan 4 bola putih. Peluang mengambil bola hitam adalah 1/2.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-04",
+      "question": "Seorang penjaga berkata bahwa peluang kejadian selalu lebih besar dari 1.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-05",
+      "question": "Dalam satu kali lempar dadu, kejadian muncul angka genap dan angka ganjil dapat terjadi bersamaan.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-06",
+      "question": "Dua koin dilempar bersamaan di ruang misteri. Peluang muncul dua gambar adalah 1/4.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-07",
+      "question": "Seorang detektif menyatakan bahwa peluang muncul minimal satu gambar dari dua koin adalah 3/4.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-08",
+      "question": "Kotak rahasia berisi 3 kunci emas dan 1 kunci perak. Peluang mengambil kunci perak adalah 3/4.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-09",
+      "question": "Jika peluang suatu kejadian adalah 0, maka kejadian tersebut mustahil terjadi.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-10",
+      "question": "Seorang penjaga mengatakan frekuensi harapan adalah hasil pasti percobaan.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-11",
+      "question": "Sebuah dadu dilempar 60 kali dalam eksperimen rahasia. Frekuensi harapan muncul angka 6 adalah 10 kali.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-12",
+      "question": "Dalam sebuah teka-teki, kejadian A dan B saling lepas jika bisa terjadi bersamaan.",
+      "answer": false,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-13",
+      "question": "Seorang detektif mengatakan ruang sampel adalah semua hasil yang mungkin terjadi.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-14",
+      "question": "Dari angka 1 sampai 6, peluang muncul angka prima adalah 1/2.",
+      "answer": true,
+      "time_limit": 20
+    },
+    {
+      "id": "M-TF-15",
+      "question": "Seorang penjaga berkata peluang kejadian A ∪ B pada kejadian tidak saling lepas cukup dijumlahkan saja.",
+      "answer": false,
+      "time_limit": 20
+    }
+  ],
+
+  "multiple_choice": [
+    {
+      "id": "M-MC-01",
+      "question": "Peluang TIDAK muncul angka genap pada satu kali lempar dadu adalah …",
+      "options": ["1/6", "1/3", "1/2", "2/3"],
+      "answer": 2,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-02",
+      "question": "Dua koin dilempar bersamaan. Peluang muncul minimal satu gambar adalah …",
+      "options": ["3/4", "2/4", "1"],
+      "answer": 0,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-03",
+      "question": "A = muncul angka genap, B = muncul angka kelipatan 3 pada dadu. Peluang A atau B adalah …",
+      "options": ["1/6", "2/3", "1/3"],
+      "answer": 1,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-04",
+      "question": "Dalam kotak terdapat 4 kunci emas dan 6 kunci perak. Peluang bukan mengambil kunci emas adalah …",
+      "options": ["2/5", "3/5", "4/5"],
+      "answer": 1,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-05",
+      "question": "Sebuah dadu dilempar 120 kali. Frekuensi harapan muncul angka kurang dari 3 adalah …",
+      "options": ["20", "30", "40"],
+      "answer": 2,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-06",
+      "question": "Dua kejadian dikatakan saling lepas jika …",
+      "options": [
+        "Dapat terjadi bersamaan",
+        "Tidak memiliki irisan",
+        "Memiliki irisan"
+      ],
+      "answer": 1,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-07",
+      "question": "Dua dadu dilempar bersamaan. Peluang kedua mata dadu sama adalah …",
+      "options": ["1/12", "1/9", "1/6"],
+      "answer": 2,
+      "time_limit": 25
+    },
+    {
+      "id": "M-MC-08",
+      "question": "Jika peluang suatu kejadian adalah 0,8, maka pernyataan yang benar adalah …",
+      "options": [
+        "Kejadian mustahil",
+        "Kejadian jarang terjadi",
+        "Kejadian sering terjadi"
+      ],
+      "answer": 2,
+      "time_limit": 25
+    }
+  ],
+
+  "what_if": [
+    {
+      "id": "M-WI-01",
+      "question": "Jika sebuah kejadian dikatakan hampir pasti, maka peluangnya berada di …",
+      "answer": "Antara 0 dan 1 (mendekati 1)",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-02",
+      "question": "Jika suatu kejadian tidak mustahil dan tidak pasti, maka nilai peluangnya …",
+      "answer": "0 < P < 1",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-03",
+      "question": "Jika dua kejadian selalu muncul bersamaan, maka hubungannya adalah …",
+      "answer": "Saling bergantung / identik",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-04",
+      "question": "Jika suatu kejadian selalu terjadi, maka peluangnya adalah …",
+      "answer": "1",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-05",
+      "question": "Jika suatu kejadian tidak pernah muncul, maka peluang teoritisnya adalah …",
+      "answer": "0",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-06",
+      "question": "Jika peluang A lebih besar dari peluang bukan A, maka kejadian A …",
+      "answer": "Lebih mungkin terjadi",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-07",
+      "question": "Jika dua kejadian tidak pernah muncul bersama, maka sifatnya …",
+      "answer": "Saling lepas",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-08",
+      "question": "Jika hasil percobaan sudah diketahui, maka peluang hasil tersebut adalah …",
+      "answer": "1",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-09",
+      "question": "Peluang yang dihitung setelah hasil lain diketahui disebut …",
+      "answer": "Peluang bersyarat",
+      "time_limit": 30
+    },
+    {
+      "id": "M-WI-10",
+      "question": "Jika dua kejadian tidak memengaruhi satu sama lain, maka hubungannya …",
+      "answer": "Saling bebas",
+      "time_limit": 30
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "difficulty": "easy",
+
+  "multiple_choice": [
+    {
+      "id": "E-MC-01",
+      "question": "Jika sebuah dadu dilempar satu kali, banyaknya ruang sampel adalah …",
+      "options": ["3", "4", "6"],
+      "answer": 2,
+      "explanation": "Ruang sampel pelemparan satu dadu adalah {1,2,3,4,5,6}",
+      "time_limit": 30
+    },
+    {
+      "id": "E-MC-02",
+      "question": "Peluang muncul angka genap pada pelemparan satu dadu adalah …",
+      "options": ["1/6", "1/2", "1/3"],
+      "answer": 1,
+      "explanation": "Angka genap {2,4,6} berjumlah 3 dari 6 sehingga peluangnya 1/2",
+      "time_limit": 30
+    },
+    {
+      "id": "E-MC-03",
+      "question": "Semua kemungkinan hasil dari suatu percobaan disebut …",
+      "options": ["Kejadian", "Sampel", "Ruang sampel"],
+      "answer": 2,
+      "explanation": "Semua kemungkinan hasil disebut ruang sampel",
+      "time_limit": 30
+    },
+    {
+      "id": "E-MC-04",
+      "question": "Sebuah koin dilempar satu kali. Peluang muncul gambar adalah …",
+      "options": ["1/2", "1/4", "0"],
+      "answer": 0,
+      "explanation": "Koin memiliki dua sisi dengan peluang sama",
+      "time_limit": 30
+    },
+    {
+      "id": "E-MC-05",
+      "question": "Nilai peluang suatu kejadian selalu berada di antara …",
+      "options": ["−1 dan 1", "0 dan 1", "1 dan 10"],
+      "answer": 1,
+      "explanation": "Nilai peluang selalu berada antara 0 dan 1",
+      "time_limit": 30
+    },
+    {
+      "id": "E-MC-06",
+      "question": "Jika peluang suatu kejadian bernilai 0, maka kejadian tersebut …",
+      "options": ["Pasti terjadi", "Mungkin terjadi", "Tidak mungkin terjadi"],
+      "answer": 2,
+      "explanation": "Peluang 0 berarti kejadian mustahil",
+      "time_limit": 30
+    }
+  ],
+
+  "true_false": [
+    {
+      "id": "E-TF-01",
+      "question": "Ruang sampel adalah kumpulan semua hasil yang mungkin.",
+      "answer": true,
+      "explanation": "Ini merupakan definisi ruang sampel",
+      "time_limit": 20
+    },
+    {
+      "id": "E-TF-02",
+      "question": "Peluang muncul angka ganjil pada dadu adalah 1/2.",
+      "answer": true,
+      "explanation": "Angka ganjil {1,3,5} berjumlah 3 dari 6",
+      "time_limit": 20
+    },
+    {
+      "id": "E-TF-03",
+      "question": "Peluang suatu kejadian bisa bernilai lebih dari 1.",
+      "answer": false,
+      "explanation": "Nilai peluang maksimum adalah 1",
+      "time_limit": 20
+    },
+    {
+      "id": "E-TF-04",
+      "question": "Kejadian saling lepas tidak dapat terjadi bersamaan.",
+      "answer": true,
+      "explanation": "Definisi kejadian saling lepas",
+      "time_limit": 20
+    },
+    {
+      "id": "E-TF-05",
+      "question": "Muncul gambar dan angka pada satu kali lempar koin adalah kejadian saling lepas.",
+      "answer": true,
+      "explanation": "Tidak mungkin terjadi bersamaan",
+      "time_limit": 20
+    },
+    {
+      "id": "E-TF-06",
+      "question": "Frekuensi harapan digunakan untuk memperkirakan banyaknya kejadian.",
+      "answer": true,
+      "explanation": "Frekuensi harapan adalah nilai perkiraan",
+      "time_limit": 20
+    }
+  ],
+
+  "essay": [
+    {
+      "id": "E-ES-01",
+      "question": "Tuliskan ruang sampel dari pelemparan satu koin!",
+      "answer": "{angka, gambar}",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-02",
+      "question": "Tuliskan ruang sampel dari pelemparan satu dadu!",
+      "answer": "{1, 2, 3, 4, 5, 6}",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-03",
+      "question": "Tentukan peluang muncul angka 3 pada satu kali pelemparan dadu!",
+      "answer": "1/6",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-04",
+      "question": "Tentukan peluang muncul angka genap pada dadu!",
+      "answer": "3/6 = 1/2",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-05",
+      "question": "Jelaskan pengertian peluang secara singkat!",
+      "answer": "Peluang adalah ukuran kemungkinan terjadinya suatu kejadian.",
+      "time_limit": 60
+    },
+    {
+      "id": "E-ES-06",
+      "question": "Apa yang dimaksud dengan ruang sampel?",
+      "answer": "Ruang sampel adalah kumpulan semua hasil yang mungkin terjadi.",
+      "time_limit": 60
+    },
+    {
+      "id": "E-ES-07",
+      "question": "Dalam pelemparan satu koin, apakah kejadian muncul gambar dan angka saling lepas?",
+      "answer": "Ya, saling lepas.",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-08",
+      "question": "Sebuah dadu dilempar 60 kali. Tentukan frekuensi harapan muncul angka 6!",
+      "answer": "P(6) = 1/6, Fh = 60 × 1/6 = 10",
+      "time_limit": 60
+    },
+    {
+      "id": "E-ES-09",
+      "question": "Tuliskan rumus peluang kejadian A!",
+      "answer": "P(A) = n(A) / n(S)",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-10",
+      "question": "Tuliskan rumus frekuensi harapan!",
+      "answer": "Fh = n × P(A)",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-11",
+      "question": "Dalam kotak terdapat 2 bola merah dan 2 bola putih. Tentukan peluang terambil bola merah!",
+      "answer": "2/4 = 1/2",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-12",
+      "question": "Jika peluang suatu kejadian adalah 1, apa artinya?",
+      "answer": "Kejadian tersebut pasti terjadi.",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-13",
+      "question": "Tentukan peluang muncul angka ganjil pada dadu!",
+      "answer": "3/6 = 1/2",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-14",
+      "question": "Nilai peluang suatu kejadian selalu berada di antara angka berapa?",
+      "answer": "0 dan 1",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-15",
+      "question": "Apakah kejadian “muncul angka 2” dan “muncul angka genap” saling lepas?",
+      "answer": "Tidak, karena dapat terjadi bersamaan.",
+      "time_limit": 60
+    },
+    {
+      "id": "E-ES-16",
+      "question": "Tentukan peluang muncul angka kurang dari 4 pada dadu!",
+      "answer": "3/6 = 1/2",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-17",
+      "question": "Tuliskan contoh kejadian saling lepas!",
+      "answer": "Muncul angka dan gambar pada satu kali lempar koin.",
+      "time_limit": 45
+    },
+    {
+      "id": "E-ES-18",
+      "question": "Dari 10 siswa, 4 siswa suka membaca. Tentukan peluang terpilih siswa yang suka membaca!",
+      "answer": "4/10 = 2/5",
+      "time_limit": 60
+    }
+  ]
+}

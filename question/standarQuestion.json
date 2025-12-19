@@ -1,0 +1,223 @@
+{
+  "difficulty": "standard",
+
+  "multiple_choice": [
+    {
+      "id": "S-MC-01",
+      "question": "Sebuah dadu dilempar satu kali. Peluang muncul angka prima adalah …",
+      "options": ["1/6", "1/3", "1/2"],
+      "answer": 2,
+      "explanation": "Bilangan prima pada dadu {2,3,5} berjumlah 3 dari 6",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-02",
+      "question": "Sebuah koin dilempar dua kali. Banyaknya anggota ruang sampel adalah …",
+      "options": ["2", "3", "4"],
+      "answer": 2,
+      "explanation": "Ruang sampel dua koin adalah {AA, AG, GA, GG}",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-03",
+      "question": "Dalam satu kali pelemparan dadu, kejadian A = muncul angka genap dan kejadian B = muncul angka kelipatan 3. Peluang A ∪ B adalah …",
+      "options": ["1/6", "2/3", "1/2"],
+      "answer": 1,
+      "explanation": "Gabungan {2,3,4,6} = 4/6 = 2/3",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-04",
+      "question": "Kejadian A dan B dikatakan tidak saling lepas jika …",
+      "options": [
+        "Tidak mungkin terjadi",
+        "Selalu terjadi",
+        "Dapat terjadi bersamaan"
+      ],
+      "answer": 2,
+      "explanation": "Tidak saling lepas berarti bisa terjadi bersamaan",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-05",
+      "question": "Sebuah dadu dilempar 90 kali. Frekuensi harapan muncul angka ganjil adalah …",
+      "options": ["45", "30", "15"],
+      "answer": 0,
+      "explanation": "Angka ganjil ada 3 dari 6, sehingga 90 × 1/2 = 45",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-06",
+      "question": "Jika P(A) = 3/8 dan percobaan dilakukan 80 kali, maka frekuensi harapan kejadian A adalah …",
+      "options": ["20", "25", "30"],
+      "answer": 2,
+      "explanation": "Fh = 80 × 3/8 = 30",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-07",
+      "question": "Dalam satu set kartu bernomor 1–10, peluang terambil kartu ganjil adalah …",
+      "options": ["1/2", "2/5", "1/10"],
+      "answer": 0,
+      "explanation": "Bilangan ganjil ada 5 dari 10",
+      "time_limit": 45
+    },
+    {
+      "id": "S-MC-08",
+      "question": "Nilai peluang kejadian A adalah 0,75. Pernyataan yang benar adalah …",
+      "options": [
+        "Kejadian A sering terjadi",
+        "Kejadian A jarang terjadi",
+        "Kejadian A mustahil terjadi"
+      ],
+      "answer": 0,
+      "explanation": "Peluang mendekati 1 berarti sering terjadi",
+      "time_limit": 45
+    }
+  ],
+
+  "true_false": [
+    {
+      "id": "S-TF-01",
+      "question": "Peluang kejadian genap dan ganjil pada satu kali lempar dadu adalah kejadian saling lepas.",
+      "answer": true,
+      "explanation": "Genap dan ganjil tidak dapat terjadi bersamaan",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-02",
+      "question": "Frekuensi harapan selalu sama dengan hasil percobaan sebenarnya.",
+      "answer": false,
+      "explanation": "Frekuensi harapan hanya nilai perkiraan",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-03",
+      "question": "Peluang muncul angka prima pada dadu adalah 1/2.",
+      "answer": true,
+      "explanation": "Bilangan prima {2,3,5} = 3/6",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-04",
+      "question": "Kejadian tidak saling lepas memiliki irisan.",
+      "answer": true,
+      "explanation": "Tidak saling lepas berarti memiliki irisan",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-05",
+      "question": "Jika n(S) = 10 dan n(A) = 2, maka P(A) = 1/5.",
+      "answer": true,
+      "explanation": "P(A) = 2/10 = 1/5",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-06",
+      "question": "Ruang sampel tidak dapat dituliskan dalam bentuk daftar.",
+      "answer": false,
+      "explanation": "Ruang sampel bisa dituliskan dalam bentuk daftar",
+      "time_limit": 30
+    },
+    {
+      "id": "S-TF-07",
+      "question": "Peluang suatu kejadian tidak pernah bernilai negatif.",
+      "answer": true,
+      "explanation": "Nilai peluang selalu ≥ 0",
+      "time_limit": 30
+    }
+  ],
+
+  "essay": [
+    {
+      "id": "S-ES-01",
+      "question": "Tuliskan ruang sampel dari pelemparan dua koin!",
+      "answer": "{AA, AG, GA, GG}",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-02",
+      "question": "Tentukan peluang muncul tepat satu gambar dari dua kali pelemparan koin!",
+      "answer": "2/4 = 1/2",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-03",
+      "question": "Sebuah dadu dilempar satu kali. Tentukan peluang muncul angka lebih dari 4!",
+      "answer": "2/6 = 1/3",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-04",
+      "question": "Jelaskan perbedaan kejadian saling lepas dan tidak saling lepas!",
+      "answer": "Saling lepas tidak dapat terjadi bersamaan, tidak saling lepas dapat terjadi bersamaan.",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-05",
+      "question": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola putih. Tentukan peluang terambil bola putih!",
+      "answer": "3/8",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-06",
+      "question": "Suatu koin dilempar 100 kali. Tentukan frekuensi harapan muncul gambar!",
+      "answer": "100 × 1/2 = 50",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-07",
+      "question": "Dari angka 1 sampai 12, diambil satu angka secara acak. Tentukan peluang terambil angka kelipatan 3!",
+      "answer": "4/12 = 1/3",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-08",
+      "question": "Apakah kejadian “muncul angka 4” dan “muncul angka genap” saling lepas? Jelaskan!",
+      "answer": "Tidak, karena angka 4 termasuk genap sehingga dapat terjadi bersamaan.",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-09",
+      "question": "Jika peluang suatu kejadian adalah 0,2, apa arti peluang tersebut?",
+      "answer": "Kejadian jarang terjadi.",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-10",
+      "question": "Jelaskan arti peluang bernilai 0 dan 1!",
+      "answer": "0 berarti tidak mungkin, 1 berarti pasti.",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-11",
+      "question": "Sebuah dadu dilempar satu kali. Tentukan peluang muncul angka kurang dari 7!",
+      "answer": "6/6 = 1",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-12",
+      "question": "Dari 40 siswa, 10 siswa suka matematika. Tentukan peluang terpilih siswa yang suka matematika!",
+      "answer": "10/40 = 1/4",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-13",
+      "question": "Sebuah dadu dilempar 150 kali. Tentukan frekuensi harapan muncul angka 5!",
+      "answer": "150 × 1/6 = 25",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-14",
+      "question": "Tuliskan contoh kejadian tidak saling lepas!",
+      "answer": "Muncul angka genap dan muncul angka kelipatan 2 pada dadu.",
+      "time_limit": 60
+    },
+    {
+      "id": "S-ES-15",
+      "question": "Tentukan peluang muncul angka ganjil atau kelipatan 3 pada satu kali pelemparan dadu!",
+      "answer": "Gabungan {1,3,5,6} → 4/6 = 2/3",
+      "time_limit": 60
+    }
+  ]
+}
