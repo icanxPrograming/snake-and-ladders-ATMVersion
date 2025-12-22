@@ -1742,3 +1742,90 @@ button:hover {
 .wrong-text {
   color: #c0392b; /* Merah yang lebih gelap agar terbaca jelas */
 }
+
+/* Styling tambahan untuk ikon badai di info modal */
+.storm-icon-bg {
+  min-width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  background: #9b59b6; /* Warna ungu mengikuti tema storm */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(155, 89, 182, 0.3);
+  font-size: 18px;
+}
+
+.storm-info-item {
+  background-color: rgba(
+    155,
+    89,
+    182,
+    0.05
+  ); /* Memberi sedikit highlight latar belakang */
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px dashed #9b59b6;
+  margin-top: 10px;
+}
+
+/* RESPONSIVE: Saat layar < 900px (Layar Tablet/HP) */
+@media screen and (max-width: 992px) {
+  /* #screen3 {
+    flex-direction: column;
+  } */
+
+  /* Pindahkan BGM ke Kiri */
+  .music-btn-global {
+    right: auto; /* Hilangkan posisi kanan */
+    left: 15px; /* Tempel di kiri */
+    top: 15px;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Info tetap di Kanan (sesuai class .info-btn Anda) */
+  .info-btn {
+    right: 15px !important;
+    top: 15px !important;
+    width: 40px !important;
+    height: 40px !important;
+    position: fixed !important; /* Buat fixed agar tidak tertutup board saat scroll */
+  }
+
+  .storm-ui-box {
+    /* Ubah posisi agar tidak menumpuk di atas board */
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 10px auto; /* Ketengah secara horizontal */
+    width: fit-content;
+    min-width: 200px;
+    display: flex;
+    flex-direction: row; /* Ubah jadi memanjang ke samping agar hemat tempat */
+    align-items: center;
+    gap: 15px;
+    padding: 8px 20px;
+  }
+
+  .storm-header {
+    margin-bottom: 0; /* Hilangkan margin bawah karena sekarang bersebelahan */
+    white-space: nowrap;
+  }
+
+  .storm-time {
+    font-size: 20px; /* Kecilkan sedikit angka jam */
+  }
+
+  .storm-bar-bg {
+    display: none; /* Sembunyikan progress bar di mobile agar ringkas */
+  }
+}
+
+/* RESPONSIVE: Jika sangat kecil (HP Portrait) */
+@media screen and (max-width: 480px) {
+  .storm-ui-box {
+    transform: scale(0.65); /* Perkecil seluruh kotak */
+    margin-bottom: 0;
+  }
+}

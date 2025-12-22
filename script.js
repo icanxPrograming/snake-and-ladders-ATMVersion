@@ -6,6 +6,14 @@ let specialTiles = {
   mystery: [],
 };
 
+let pendingFate = null; // Menyimpan data nasib (ular/tangga)
+
+// ===== Variabel Probability Storm =====
+let isStormActive = false;
+let stormTimer = null;
+let stormPlayerIndex = 0; // Untuk melacak siapa yang sedang menjawab di dalam Storm
+let stormQueue = []; // Antrean pemain dalam Storm
+
 // Bobot probabilitas pengambilan soal berdasarkan tingkat kesulitan game yang dipilih
 const difficultyWeights = {
   easy: { easy: 0.6, standard: 0.25, hard: 0.1, mystery: 0.05 },
@@ -162,11 +170,190 @@ const diceIcons = [
 // Players
 let playersCount = 2;
 const players = [
-  { name: "Player1", image: 1, lastDice: 0, score: 0, canPlay: true },
-  { name: "Player2", image: 0, lastDice: 0, score: 0, canPlay: true },
-  { name: "Player3", image: 3, lastDice: 0, score: 0, canPlay: true },
-  { name: "Player4", image: 4, lastDice: 0, score: 0, canPlay: true },
+  {
+    name: "Player1",
+    image: 1,
+    lastDice: 0,
+    score: 0,
+    canPlay: true,
+    stats: {
+      correct: 0,
+      wrong: 0,
+      ladders: 0,
+      snakes: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      totalMoves: 0, // Untuk menghitung berapa kali kocok dadu sampai finish
+      stormWins: 0, // Untuk menghitung berapa kali menjawab benar saat Probability Storm
+    },
+  },
+  {
+    name: "Player2",
+    image: 0,
+    lastDice: 0,
+    score: 0,
+    canPlay: true,
+    stats: {
+      correct: 0,
+      wrong: 0,
+      ladders: 0,
+      snakes: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      totalMoves: 0, // Untuk menghitung berapa kali kocok dadu sampai finish
+      stormWins: 0, // Untuk menghitung berapa kali menjawab benar saat Probability Storm
+    },
+  },
+  {
+    name: "Player3",
+    image: 3,
+    lastDice: 0,
+    score: 0,
+    canPlay: true,
+    stats: {
+      correct: 0,
+      wrong: 0,
+      ladders: 0,
+      snakes: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      totalMoves: 0, // Untuk menghitung berapa kali kocok dadu sampai finish
+      stormWins: 0, // Untuk menghitung berapa kali menjawab benar saat Probability Storm
+    },
+  },
+  {
+    name: "Player4",
+    image: 4,
+    lastDice: 0,
+    score: 0,
+    canPlay: true,
+    stats: {
+      correct: 0,
+      wrong: 0,
+      ladders: 0,
+      snakes: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      totalMoves: 0, // Untuk menghitung berapa kali kocok dadu sampai finish
+      stormWins: 0, // Untuk menghitung berapa kali menjawab benar saat Probability Storm
+    },
+  },
 ];
+
+const resetAllPlayerStats = () => {
+  console.log("Resetting all players stats and game states...");
+
+  players.forEach((player, index) => {
+    player.score = 0;
+    player.lastDice = 0;
+    player.canPlay = true;
+    player.stats = {
+      correct: 0,
+      wrong: 0,
+      ladders: 0,
+      snakes: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      totalMoves: 0, // Pastikan ini ada jika Anda memakainya di julukan
+      stormWins: 0, // Pastikan ini ada jika Anda memakainya di julukan
+    };
+  });
+
+  // Reset State Global Game
+  currentTurnPlayer = 1;
+  isRolling = false;
+  isProcessingAnswer = false;
+  pendingFate = null;
+
+  // Reset Probability Storm
+  isStormActive = false;
+  if (stormTimer) clearInterval(stormTimer);
+  stormTimeRemaining = TOTAL_STORM_TIME;
+};
+
+const downloadCertificate = () => {
+  const element = document.getElementById("certificateExportArea");
+  const playerName =
+    document.getElementById("certName").textContent || "Player";
+
+  // Gunakan html2canvas untuk mengambil screenshot elemen
+  html2canvas(element, {
+    scale: 2, // Meningkatkan resolusi gambar (HD)
+    useCORS: true, // Izinkan resource dari luar jika ada
+    backgroundColor: "#ffffff", // Pastikan background putih
+  }).then((canvas) => {
+    // Ubah canvas menjadi URL Gambar
+    const imageData = canvas.toDataURL("image/png");
+
+    // Buat link download otomatis
+    const link = document.createElement("a");
+    link.download = `Sertifikat_MathGame_${playerName}.png`;
+    link.href = imageData;
+    link.click();
+
+    console.log("Certificate downloaded successfully!");
+  });
+};
+
+// Fungsi membuka modal panduan
+const openGuideModal = () => {
+  const guideModal = document.getElementById("guideModal");
+  if (guideModal) {
+    guideModal.classList.remove("hide");
+  }
+};
+
+// Fungsi menutup modal panduan
+const closeGuideModal = () => {
+  const guideModal = document.getElementById("guideModal");
+  if (guideModal) {
+    guideModal.classList.add("hide");
+  }
+};
+
+// Ambil elemen BGM
+const bgm = document.getElementById("bgmAudio");
+const musicIcon = document.getElementById("musicIcon");
+let isMusicPlaying = false;
+
+// Atur volume BGM agar tidak menabrak sound effect lain (0.3 = 30% volume)
+bgm.volume = 0.1;
+
+const toggleMusic = () => {
+  if (isMusicPlaying) {
+    bgm.pause();
+    musicIcon.textContent = "music_off";
+  } else {
+    bgm
+      .play()
+      .catch((error) => console.log("User interaction required to play audio"));
+    musicIcon.textContent = "music_note";
+  }
+  isMusicPlaying = !isMusicPlaying;
+};
+
+// Fungsi untuk mengecilkan volume saat ada soal (Ducking)
+const lowerBGM = () => {
+  if (bgm) bgm.volume = 0.1;
+};
+
+// Fungsi untuk mengembalikan volume ke normal
+const restoreBGM = () => {
+  if (bgm) bgm.volume = 0.2;
+};
+
+// Panggil fungsi ini di dalam fungsi next() agar musik mulai saat game dimulai
+const startBGM = () => {
+  if (!isMusicPlaying) {
+    bgm
+      .play()
+      .then(() => {
+        isMusicPlaying = true;
+        musicIcon.textContent = "music_note";
+      })
+      .catch((e) => console.log("Menunggu interaksi user..."));
+  }
+};
 
 // Screens
 const screen1 = document.querySelector("#screen1");
@@ -735,18 +922,11 @@ const checkEssayAnswer = (userAns, correctAns, type) => {
   return u === c;
 };
 
-// ===== Submit jawaban =====
 const submitAnswer = (question, answer) => {
   console.log(`submitAnswer called, isProcessingAnswer: ${isProcessingAnswer}`);
 
-  // Cegah double submission
-  if (isProcessingAnswer) {
-    console.log("Already processing answer, skipping");
-    return;
-  }
-
+  if (isProcessingAnswer) return;
   isProcessingAnswer = true;
-
   if (questionTimer) clearInterval(questionTimer);
 
   let correct = false;
@@ -755,27 +935,34 @@ const submitAnswer = (question, answer) => {
   if (!question) {
     correct = false;
     message = "Soal tidak valid";
-  }
-  // Untuk pilihan ganda dan benar/salah, perbandingan tetap kaku (exact match)
-  else if (
+  } else if (
     question.type === "multiple_choice" ||
     question.type === "true_false"
   ) {
     correct = answer === question.answer;
     message = correct ? "Jawaban benar!" : "Jawaban salah!";
-  }
-  // Untuk essay dan what_if, gunakan fungsi helper checkEssayAnswer
-  else if (question.type === "essay" || question.type === "what_if") {
-    // Kita kirim 'answer' (dari user), 'question.answer' (dari JSON),
-    // dan 'question.input_type' (text/math/set)
+  } else if (question.type === "essay" || question.type === "what_if") {
     correct = checkEssayAnswer(answer, question.answer, question.input_type);
     message = correct ? "Jawaban benar!" : "Jawaban kurang tepat!";
   }
 
-  // Tampilkan hasil
+  // --- LOGIKA PENCATATAN STATISTIK (TAMBAHAN BARU) ---
+  const pIdx = currentPlayerTemp - 1;
+  if (correct) {
+    players[pIdx].stats.correct++;
+    players[pIdx].stats.currentStreak++;
+    // Update rekor streak tertinggi
+    if (players[pIdx].stats.currentStreak > players[pIdx].stats.maxStreak) {
+      players[pIdx].stats.maxStreak = players[pIdx].stats.currentStreak;
+    }
+  } else {
+    players[pIdx].stats.wrong++;
+    players[pIdx].stats.currentStreak = 0; // Streak putus jika salah
+  }
+  // --------------------------------------------------
+
   showAnswerResult(correct, message);
 
-  // Tampilkan penjelasan jika ada
   if (question.explanation) {
     const explanationDiv = document.getElementById("explanation");
     if (explanationDiv) {
@@ -787,7 +974,6 @@ const submitAnswer = (question, answer) => {
     }
   }
 
-  // Tunggu sebentar lalu lanjutkan
   setTimeout(() => {
     const questionModal = document.querySelector("#questionModal");
     if (questionModal) questionModal.classList.add("hide");
@@ -795,8 +981,110 @@ const submitAnswer = (question, answer) => {
     const resultModal = document.getElementById("resultModal");
     if (resultModal) resultModal.classList.add("hide");
 
-    handleMoveAfterQuestion(correct);
+    if (currentQuestion && currentQuestion.isStorm) {
+      if (correct) {
+        // --- TAMBAHAN STATS ---
+        players[currentPlayerTemp - 1].stats.stormWins++; // Catat kemenangan badai
+        // ----------------------
+        showAnswerResult(
+          true,
+          `${players[currentPlayerTemp - 1].name} BERHASIL! Maju 3 Langkah.`
+        );
+        isProcessingAnswer = true;
+        setTimeout(() => {
+          closeResultModal();
+          movePot(3, currentPlayerTemp, true);
+        }, 2000);
+      } else {
+        isProcessingAnswer = false;
+        stormPlayerIndex++;
+        processNextStormPlayer();
+      }
+    } else if (pendingFate) {
+      const type = pendingFate.type;
+      const idx = pendingFate.index;
+      const pNo = pendingFate.playerNo;
+      pendingFate = null;
+
+      if (correct) {
+        if (type === "LADDER") {
+          showAnswerResult(true, "BENAR! Kamu berhak naik tangga!");
+          setTimeout(() => {
+            closeResultModal();
+            specialMove(idx, pNo);
+            setTimeout(() => nextTurn(), 2500);
+          }, 2000);
+        } else {
+          showAnswerResult(true, "BENAR! Kamu selamat dari ular!");
+          setTimeout(() => {
+            closeResultModal();
+            nextTurn();
+          }, 2000);
+        }
+      } else {
+        if (type === "LADDER") {
+          showAnswerResult(false, "SALAH! Kamu gagal naik tangga.");
+          setTimeout(() => {
+            closeResultModal();
+            nextTurn();
+          }, 2000);
+        } else {
+          showAnswerResult(false, "SALAH! Kamu gagal menyelamatkan diri!");
+          setTimeout(() => {
+            closeResultModal();
+            specialMoveSnake(idx, pNo);
+            setTimeout(() => nextTurn(), 2500);
+          }, 2000);
+        }
+      }
+    } else {
+      handleMoveAfterQuestion(correct);
+    }
   }, 3000);
+};
+
+// Fungsi untuk menentukan gelar berdasarkan statistik
+const getAchievementTitle = (player) => {
+  const s = player.stats;
+  const totalQuestions = s.correct + s.wrong;
+  const accuracy = totalQuestions > 0 ? (s.correct / totalQuestions) * 100 : 0;
+
+  // 1. Julukan Akurasi & Jenius
+  if (accuracy === 100 && s.correct >= 10) return "Sang Arsitek Angka Sempurna";
+  if (s.maxStreak >= 10) return "Legenda Matematika Tak Terhentikan";
+  if (s.maxStreak >= 5) return "Pakar Logika Cerdas";
+
+  // 2. Julukan Keberuntungan & Papan
+  if (s.snakes >= 5) return "Penyintas Ular yang Tangguh";
+  if (s.ladders >= 5) return "Penakluk Tangga Tertinggi";
+  if (s.snakes === 0 && s.score === 100)
+    return "Pejalan Cahaya Tanpa Rintangan";
+
+  // 3. Julukan Kegigihan
+  if (s.wrong > 10) return "Pejuang Angka yang Pantang Menyerah";
+  if (s.correct > 15) return "Sang Profesor Probabilitas";
+
+  // Default
+  return "Pemenang Tantangan Matematika";
+};
+
+// Fungsi utama menampilkan sertifikat
+const showCertificate = (player) => {
+  const certModal = document.getElementById("certificateModal");
+
+  // Mengisi konten sertifikat
+  document.getElementById("certName").textContent = player.name;
+  document.getElementById("certTitle").textContent =
+    getAchievementTitle(player);
+
+  // Mengisi statistik detail
+  document.getElementById("statCorrect").textContent = player.stats.correct;
+  document.getElementById("statStreak").textContent = player.stats.maxStreak;
+  document.getElementById("statLadders").textContent = player.stats.ladders;
+  document.getElementById("statSnakes").textContent = player.stats.snakes;
+
+  // Menampilkan modal sertifikat
+  certModal.classList.remove("hide");
 };
 
 // ===== Handle pergerakan setelah soal =====
@@ -866,6 +1154,8 @@ const closeQuestionModal = () => {
   isRolling = false;
   isProcessingAnswer = false;
 
+  restoreBGM();
+
   // Kembalikan kontrol ke pemain yang sama
   enableCurrentPlayerDice();
 };
@@ -917,7 +1207,6 @@ const updateBoard = () => {
 
 const checkTileTrigger = (currentScore, playerNo) => {
   let tileDifficulty = null;
-
   if (specialTiles.easy.includes(currentScore)) tileDifficulty = "easy";
   else if (specialTiles.standard.includes(currentScore))
     tileDifficulty = "standard";
@@ -926,18 +1215,13 @@ const checkTileTrigger = (currentScore, playerNo) => {
     tileDifficulty = "mystery";
 
   if (tileDifficulty) {
-    // Pemain menginjak kotak khusus! Berikan soal.
     askQuestionOnTile(playerNo, tileDifficulty);
   } else {
-    // Kotak biasa, cek tangga/ular
-    checkSnakeAndLadder(currentScore, playerNo);
-
-    // PENTING: Tambahkan nextTurn() agar giliran berganti jika kotak biasa
-    // Beri sedikit delay agar animasi ular/tangga (jika ada) selesai dulu
-    setTimeout(() => {
-      console.log("Kotak biasa, pindah giliran...");
-      nextTurn();
-    }, 800);
+    // Hanya ganti turn jika TIDAK ada ular/tangga yang tertunda
+    if (!pendingFate) {
+      checkSnakeAndLadder(currentScore, playerNo);
+      setTimeout(() => nextTurn(), 800);
+    }
   }
 };
 
@@ -1023,87 +1307,140 @@ const askQuestionOnTile = (playerNo, tileType) => {
   }, 1000);
 
   // 5. Munculkan Modal & Setup Input
+  lowerBGM(); // Musik mengecil
   modal.classList.remove("hide");
   setupQuestionByType(currentQuestion);
 };
 
-// ===== Move Pot yang Disesuaikan =====
-// ===== Move Pot yang Disesuaikan =====
 const movePot = (value, playerNumber, isBonusMove = false) => {
-  console.log(
-    `movePot START: Player ${playerNumber} moving ${value} (Bonus: ${isBonusMove})`
-  );
-
+  console.log(`movePot START: Player ${playerNumber} moving ${value}`);
   if (playerNumber < 1 || playerNumber > playersCount) return;
 
   let player = players[playerNumber - 1];
-  let end = player.score + value;
+  let startScore = player.score;
+  let targetScore = startScore + value;
 
-  // Batas papan 0-100
-  if (end > 100) end = 100;
-  if (end < 0) end = 0;
+  let isBouncing = targetScore > 100;
+  let finalEnd = isBouncing ? 100 - (targetScore - 100) : targetScore;
+  if (finalEnd < 0) finalEnd = 0;
 
-  let i = player.score;
-  const direction = value > 0 ? 1 : -1;
-  const steps = Math.abs(value);
+  let i = startScore;
+  let phase = "forward";
+  isRolling = true; // Kunci dadu agar tidak diklik saat pion jalan
 
-  // Animasi pergerakan pion langkah demi langkah
   const t = setInterval(() => {
-    if ((direction > 0 && i < end) || (direction < 0 && i > end)) {
-      i += direction;
+    let moved = false;
+    if (phase === "forward") {
+      if (i < (isBouncing ? 100 : targetScore)) {
+        i++;
+        moved = true;
+      } else {
+        phase = isBouncing ? "backward" : "finish";
+      }
+    } else if (phase === "backward") {
+      if (i > finalEnd) {
+        i--;
+        moved = true;
+      } else {
+        phase = "finish";
+      }
+    }
+
+    if (moved) {
       player.score = i;
       if (drop) {
         drop.currentTime = 0;
         drop.play();
       }
       updateBoard();
-    } else {
-      clearInterval(t);
+    }
 
-      // 1. Cek Pemenang
+    if (phase === "finish") {
+      clearInterval(t);
+      player.score = finalEnd;
+      updateBoard();
+
+      // --- 1. CEK PEMENANG & TAMPILKAN SERTIFIKAT ---
       if (player.score === 100) {
         setTimeout(() => {
-          if (modal) modal.className = "modal";
           if (success) success.play();
-          wimg.src = `images/avatars/${player.image}.png`;
-          wname.innerHTML = player.name;
-        }, 400);
+          showCertificate(player); // Panggil fungsi sertifikat
+        }, 500);
         return;
       }
 
-      // 2. Deteksi apakah pion menginjak kepala ular atau kaki tangga
-      const isOnLadder = ladders.some((lad) => lad[0] === player.score);
-      const isOnSnake = snakes.some((snk) => snk[0] === player.score);
+      const ladderIdx = ladders.findIndex((lad) => lad[0] === player.score);
+      const snakeIdx = snakes.findIndex((snk) => snk[0] === player.score);
+      const isSpecialTile =
+        specialTiles.easy.includes(player.score) ||
+        specialTiles.standard.includes(player.score) ||
+        specialTiles.hard.includes(player.score) ||
+        specialTiles.mystery.includes(player.score);
 
-      // Jalankan animasi ular/tangga
-      checkSnakeAndLadder(player.score, playerNumber);
+      // --- 2. LOGIKA GUARDIAN GATE ---
+      if ((ladderIdx !== -1 || snakeIdx !== -1) && isSpecialTile) {
+        pendingFate = {
+          type: ladderIdx !== -1 ? "LADDER" : "SNAKE",
+          index: ladderIdx !== -1 ? ladderIdx : snakeIdx,
+          playerNo: playerNumber,
+        };
 
-      // 3. Tentukan delay berdasarkan apakah ada animasi ular/tangga atau tidak
-      // Jika ada ular/tangga, beri delay lebih lama (misal 1200ms) agar animasi selesai
-      const actionDelay = isOnLadder || isOnSnake ? 1200 : 600;
-      setTimeout(() => {
-        if (!isBonusMove) {
+        // Pesan yang lebih menarik dalam Bahasa Indonesia
+        const msg =
+          pendingFate.type === "LADDER"
+            ? "KESEMPATAN EMAS! Jawab benar untuk naik tangga!"
+            : "BAHAYA! Jawab benar untuk menyelamatkan diri dari ular!";
+
+        showAnswerResult(true, msg);
+        const resultIcon = document.getElementById("resultIcon");
+        if (resultIcon)
+          resultIcon.innerHTML = pendingFate.type === "LADDER" ? "🪜" : "🐍";
+
+        setTimeout(() => {
+          closeResultModal();
           checkTileTrigger(player.score, playerNumber);
-        } else {
-          console.log("Bonus move finished, next turn...");
-          nextTurn();
-        }
-      }, actionDelay);
+        }, 2000);
+      } else {
+        // --- 3. KOTAK BIASA / TANGGA NORMAL ---
+        pendingFate = null;
+
+        // PENTING: Jalankan animasi ular/tangga normal
+        checkSnakeAndLadder(player.score, playerNumber);
+
+        // Beri jeda sedikit agar animasi ular/tangga (jika ada) selesai
+        const actionDelay = ladderIdx !== -1 || snakeIdx !== -1 ? 1500 : 800;
+
+        setTimeout(() => {
+          if (isBonusMove) {
+            isRolling = false;
+            if (isStormActive) {
+              finishStorm(true);
+            } else {
+              nextTurn();
+            }
+          } else {
+            // Cek apakah mendarat di kotak soal biasa
+            checkTileTrigger(player.score, playerNumber);
+          }
+        }, actionDelay);
+      }
     }
-  }, 400);
+  }, 300);
 };
 
 const rollDice = (playerNo) => {
-  // 1. Validasi super ketat: pastikan giliran benar dan TIDAK sedang dalam proses jalan/jawab
+  // 1. Validasi giliran dan status jalan
   if (playerNo !== currentTurnPlayer || isRolling || isProcessingAnswer) {
     console.log("Blokir klik dadu: Sedang proses...");
     return;
   }
 
-  // 2. Kunci status segera
-  isRolling = true;
+  // --- TAMBAHAN STATS ---
+  players[playerNo - 1].stats.totalMoves++; // Catat total lemparan dadu
+  // ----------------------
 
-  // 3. Matikan semua dadu secara visual dan fungsional
+  // 2. Kunci status agar tidak bisa diklik ganda
+  isRolling = true;
   disableAllDices();
 
   if (diceAudio) {
@@ -1114,16 +1451,22 @@ const rollDice = (playerNo) => {
   const diceElement = document.getElementById("dice" + playerNo);
   diceElement.classList.add("dice-rolling");
 
+  // Ambil angka dadu acak
   const diceNumber = diceArray[Math.floor(Math.random() * 6)];
 
+  // FASE 1: Selesaikan animasi putar dadu (500ms)
   setTimeout(() => {
     diceElement.innerHTML = `<i class="diceImg fas ${
       diceIcons[diceNumber - 1]
     }"></i>`;
     diceElement.classList.remove("dice-rolling");
 
-    // 4. Jalankan pergerakan pion
-    movePot(diceNumber, playerNo);
+    // FASE 2: Beri jeda agar pemain bisa melihat angka dadu dengan jelas (1000ms)
+    // Baru setelah jeda ini, pion mulai bergerak
+    setTimeout(() => {
+      console.log(`Dadu berhenti di angka ${diceNumber}. Pion mulai jalan...`);
+      movePot(diceNumber, playerNo);
+    }, 1000);
   }, 500);
 };
 
@@ -1232,30 +1575,70 @@ const checkSnake = (value, playerNumber) => {
 
 const specialMove = (idx, playerNumber) => {
   let i = 0;
-  if (ladder) ladder.play();
+  if (ladder) {
+    ladder.currentTime = 0;
+    ladder.play();
+  }
+
+  // --- TAMBAHAN UNTUK STATS ---
+  // Catat bahwa pemain ini berhasil naik tangga
+  players[playerNumber - 1].stats.ladders++;
+  // ----------------------------
+
+  isRolling = true;
+
   const t = setInterval(() => {
     if (i < ladders[idx].length) {
       players[playerNumber - 1].score = ladders[idx][i];
       updateBoard();
       i++;
+      if (drop) {
+        drop.currentTime = 0;
+        drop.play();
+      }
     } else {
       clearInterval(t);
+      isRolling = false;
+      const finalScore = ladders[idx][ladders[idx].length - 1];
+      players[playerNumber - 1].score = finalScore;
+      updateBoard();
+      console.log(`Ladder movement finished at ${finalScore}`);
     }
-  }, 400);
+  }, 300);
 };
 
 const specialMoveSnake = (idx, playerNumber) => {
   let i = 0;
-  if (snake) snake.play();
+  if (snake) {
+    snake.currentTime = 0;
+    snake.play();
+  }
+
+  // --- TAMBAHAN UNTUK STATS ---
+  // Catat bahwa pemain ini terkena ular
+  players[playerNumber - 1].stats.snakes++;
+  // ----------------------------
+
+  isRolling = true;
+
   const t = setInterval(() => {
     if (i < snakes[idx].length) {
       players[playerNumber - 1].score = snakes[idx][i];
       updateBoard();
       i++;
+      if (drop) {
+        drop.currentTime = 0;
+        drop.play();
+      }
     } else {
       clearInterval(t);
+      isRolling = false;
+      const finalScore = snakes[idx][snakes[idx].length - 1];
+      players[playerNumber - 1].score = finalScore;
+      updateBoard();
+      console.log(`Snake movement finished at ${finalScore}`);
     }
-  }, 400);
+  }, 300);
 };
 
 // ===== Player screens =====
@@ -1271,6 +1654,7 @@ const selectPlayers = (value) => {
 };
 
 const start = () => {
+  startBGM();
   screen1.style.display = "none";
   screen2.style.display = "block";
   // Set default secara programatis agar UI konsisten
@@ -1291,6 +1675,8 @@ const back = () => {
 const next = () => {
   screen2.style.display = "none";
   screen3.style.display = "block";
+  resetAllPlayerStats();
+  startBGM();
   drawBoard();
   hideFinalPlayers();
   displayNames();
@@ -1299,6 +1685,8 @@ const next = () => {
   updateTurnIndicator();
   enableCurrentPlayerDice();
   updateBoard();
+
+  startStormCountdown(); // MULAI COUNTDOWN BADAI DI SINI
 
   console.log(
     `Game started with ${playersCount} players. First turn: Player ${currentTurnPlayer}`
@@ -1494,6 +1882,192 @@ const initialState = () => {
   console.log(
     `Initial state: playersCount=${playersCount}, currentTurnPlayer=${currentTurnPlayer}`
   );
+};
+
+// Variabel tambahan untuk UI
+// Ganti bagian ini agar interval menjadi 3 menit (180 detik)
+let stormTimeRemaining = 180;
+const TOTAL_STORM_TIME = 180; // 3 menit dalam detik
+const STORM_INTERVAL = 3 * 60 * 1000; // Dalam milidetik (Opsional, untuk logika interval lain)
+
+const startStormCountdown = () => {
+  if (stormTimer) clearInterval(stormTimer);
+
+  // Reset variabel waktu
+  stormTimeRemaining = TOTAL_STORM_TIME;
+  updateStormUI();
+
+  stormTimer = setInterval(() => {
+    // Jika badai sedang aktif, jangan kurangi waktu global
+    if (isStormActive) return;
+
+    stormTimeRemaining--;
+
+    updateStormUI();
+
+    if (stormTimeRemaining <= 0) {
+      // Cek apakah pemain sedang sibuk (lagi jalan/lagi jawab soal biasa)
+      // Jika sibuk, badai ditunda 1 detik sampai kondisi aman
+      if (!isRolling && !isProcessingAnswer) {
+        triggerProbabilityStorm();
+        stormTimeRemaining = TOTAL_STORM_TIME; // Reset setelah badai dipicu
+      } else {
+        stormTimeRemaining = 1; // Tunggu 1 detik lagi
+      }
+    }
+  }, 1000);
+};
+
+const updateStormUI = () => {
+  const minutes = Math.floor(stormTimeRemaining / 60);
+  const seconds = stormTimeRemaining % 60;
+  const timeString = `${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+
+  // Update Teks
+  const timerDisplay = document.getElementById("stormCountdown");
+  if (timerDisplay) timerDisplay.textContent = timeString;
+
+  // Update Progress Bar
+  const progressBar = document.getElementById("stormProgressBar");
+  if (progressBar) {
+    const percentage = (stormTimeRemaining / TOTAL_STORM_TIME) * 100;
+    progressBar.style.width = `${percentage}%`;
+  }
+
+  // Beri efek warning jika waktu < 30 detik
+  const container = document.getElementById("stormTimerContainer");
+  if (container) {
+    if (stormTimeRemaining <= 30) {
+      container.classList.add("storm-warning");
+    } else {
+      container.classList.remove("storm-warning");
+    }
+  }
+};
+
+const triggerProbabilityStorm = () => {
+  console.log("PROBABILITY STORM STARTED!");
+  isStormActive = true;
+  disableAllDices();
+
+  // Buat antrean pemain (mulai dari player yang sedang giliran saat ini)
+  stormQueue = [];
+  for (let i = 0; i < playersCount; i++) {
+    let pIdx = (currentTurnPlayer - 1 + i) % playersCount;
+    stormQueue.push(pIdx + 1);
+  }
+
+  stormPlayerIndex = 0;
+  showStormStartNotification();
+};
+
+const showStormStartNotification = () => {
+  // Gunakan result modal untuk pemberitahuan
+  showAnswerResult(
+    true,
+    "PROBABILITY STORM! Semua pemain bersiap menjawab secara bergantian!"
+  );
+  const resultIcon = document.getElementById("resultIcon");
+  resultIcon.innerHTML = "⚡";
+  resultIcon.style.color = "#9b59b6";
+
+  setTimeout(() => {
+    closeResultModal();
+    processNextStormPlayer();
+  }, 3000);
+};
+
+const processNextStormPlayer = () => {
+  if (stormPlayerIndex >= stormQueue.length) {
+    finishStorm(false);
+    return;
+  }
+
+  const currentPlayerID = stormQueue[stormPlayerIndex];
+  currentPlayerTemp = currentPlayerID;
+
+  // RESET SEMUA STATE SEBELUM PLAYER MENJAWAB
+  isProcessingAnswer = false;
+  document.getElementById("explanation").style.display = "none";
+  document.getElementById("explanationText").textContent = "";
+
+  const q = getRandomQuestion();
+  // Pastikan currentQuestion diupdate dengan tanda isStorm
+  currentQuestion = { ...q, isStorm: true };
+
+  const modal = document.querySelector("#questionModal");
+  const badge = document.getElementById("difficultyBadge");
+
+  badge.textContent = `STORM: ${players[currentPlayerID - 1].name}`;
+  badge.className = `difficulty-badge mystery`;
+  document.getElementById("questionText").textContent = q.question;
+
+  lowerBGM();
+  modal.classList.remove("hide");
+  setupQuestionByType(currentQuestion);
+
+  startStormQuestionTimer();
+};
+
+const startStormQuestionTimer = () => {
+  const timerEl = document.getElementById("timer");
+  let timeLeft = 20; // Waktu lebih singkat untuk storm
+  timerEl.textContent = timeLeft;
+
+  if (questionTimer) clearInterval(questionTimer);
+  questionTimer = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(questionTimer);
+      handleStormTimeout();
+    }
+  }, 1000);
+};
+
+const handleStormTimeout = () => {
+  if (questionTimer) clearInterval(questionTimer);
+
+  document.querySelector("#questionModal").classList.add("hide");
+  showAnswerResult(
+    false,
+    `Waktu ${players[stormQueue[stormPlayerIndex] - 1].name} habis!`
+  );
+
+  // Pastikan status dipulihkan agar pemain berikutnya bisa menjawab
+  isProcessingAnswer = false;
+
+  setTimeout(() => {
+    closeResultModal();
+    stormPlayerIndex++;
+    processNextStormPlayer();
+  }, 2000);
+};
+
+const finishStorm = (isSuccess) => {
+  isStormActive = false;
+  isProcessingAnswer = false;
+  isRolling = false; // Buka kunci rolling
+  if (questionTimer) clearInterval(questionTimer);
+
+  if (!isSuccess) {
+    showAnswerResult(
+      false,
+      "Badai berakhir. Tidak ada yang berhasil menjawab."
+    );
+  }
+
+  const container = document.getElementById("stormTimerContainer");
+  if (container) container.classList.remove("storm-warning");
+
+  setTimeout(() => {
+    closeResultModal();
+    // Kembalikan dadu ke currentTurnPlayer (pemain asli sebelum badai)
+    enableCurrentPlayerDice();
+    stormTimeRemaining = TOTAL_STORM_TIME;
+  }, 2000);
 };
 
 initialState();
