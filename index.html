@@ -16,6 +16,66 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
     />
+    <script
+      defer
+      src="https://unpkg.com/mathlive@0.98.5/dist/mathlive.min.js"
+    ></script>
+    <style>
+      /* MathLive Keyboard Z-Index Fix */
+      :root {
+        --keyboard-zindex: 20000; /* Angka sangat besar agar di atas modal */
+      }
+
+      /* Pastikan elemen keyboard bisa menerima klik */
+      div.ML__keyboard,
+      .ML__virtual-keyboard-container {
+        pointer-events: all !important;
+        z-index: 20000 !important;
+      }
+
+      /* Hilangkan hambatan pointer pada math-field */
+      math-field {
+        pointer-events: all !important;
+        touch-action: manipulation;
+      }
+
+      /* Warna saat dipilih */
+      #diff-easy.selected {
+        background-color: #2ecc71 !important;
+        color: white;
+        border-color: #27ae60;
+      }
+
+      #diff-standard.selected {
+        background-color: #f1c40f !important;
+        color: white;
+        border-color: #f39c12;
+      }
+
+      #diff-hard.selected {
+        background-color: #e67e22 !important;
+        color: white;
+        border-color: #d35400;
+      }
+
+      .difficultyBox:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .tile-easy {
+        background-color: rgba(46, 204, 113, 0.4) !important;
+      } /* Hijau */
+      .tile-standard {
+        background-color: rgba(241, 196, 15, 0.4) !important;
+      } /* Kuning */
+      .tile-hard {
+        background-color: rgba(231, 76, 60, 0.4) !important;
+      } /* Merah */
+      .tile-mystery {
+        background-color: rgba(155, 89, 182, 0.4) !important;
+      } /* Ungu */
+    </style>
   </head>
   <body>
     <div class="screen" id="screen1">
@@ -36,29 +96,27 @@
           </div>
         </div>
         <button class="startBtn" onclick="start()">START</button>
-        <!-- <p class="info">Developed by Yash Kumar Saini @ 2023</p> -->
       </div>
     </div>
     <div class="screen" id="screen2">
-      <!-- Second Stage for adding names and user icons for the players -->
       <div class="s1-card">
-        <h1>Add Names and profile</h1>
+        <h1>Profile & Tingkat Kesulitan</h1>
+
         <div class="cards">
-          <!-- Player 1 -->
           <div class="card" id="card1">
             <div class="profile">
               <div class="arrow" onclick="updateUserProfile(1,2)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_left
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_left</span
+                >
               </div>
               <div class="selectImage">
                 <img src="images/avatars/1.png" id="profile1" />
               </div>
               <div class="arrow" onclick="updateUserProfile(1,1)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_right
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_right</span
+                >
               </div>
             </div>
             <div class="inputName">
@@ -67,27 +125,27 @@
                 oninput="changeName(1)"
                 onblur="updateValue(1)"
                 type="text"
-                placeholder="Write name here..."
+                placeholder="Nami..."
                 value="Player1"
                 id="name1"
               />
             </div>
           </div>
-          <!-- Player 2 -->
+
           <div class="card" id="card2">
             <div class="profile">
               <div class="arrow" onclick="updateUserProfile(2,2)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_left
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_left</span
+                >
               </div>
               <div class="selectImage">
                 <img src="images/avatars/0.png" id="profile2" />
               </div>
               <div class="arrow" onclick="updateUserProfile(2,1)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_right
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_right</span
+                >
               </div>
             </div>
             <div class="inputName">
@@ -96,27 +154,27 @@
                 oninput="changeName(2)"
                 onblur="updateValue(2)"
                 type="text"
-                placeholder="Write name here..."
+                placeholder="Nami..."
                 value="Player2"
                 id="name2"
               />
             </div>
           </div>
-          <!-- Player 3 -->
+
           <div class="card" id="card3">
             <div class="profile">
               <div class="arrow" onclick="updateUserProfile(3,2)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_left
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_left</span
+                >
               </div>
               <div class="selectImage">
                 <img src="images/avatars/3.png" id="profile3" />
               </div>
               <div class="arrow" onclick="updateUserProfile(3,1)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_right
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_right</span
+                >
               </div>
             </div>
             <div class="inputName">
@@ -125,27 +183,27 @@
                 oninput="changeName(3)"
                 onblur="updateValue(3)"
                 type="text"
-                placeholder="Write name here..."
+                placeholder="Nami..."
                 value="Player3"
                 id="name3"
               />
             </div>
           </div>
-          <!-- Player 4 -->
+
           <div class="card" id="card4">
             <div class="profile">
               <div class="arrow" onclick="updateUserProfile(4,2)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_left
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_left</span
+                >
               </div>
               <div class="selectImage">
                 <img src="images/avatars/4.png" id="profile4" />
               </div>
               <div class="arrow" onclick="updateUserProfile(4,1)">
-                <span class="material-symbols-outlined">
-                  keyboard_arrow_right
-                </span>
+                <span class="material-symbols-outlined"
+                  >keyboard_arrow_right</span
+                >
               </div>
             </div>
             <div class="inputName">
@@ -154,23 +212,62 @@
                 oninput="changeName(4)"
                 onblur="updateValue(4)"
                 type="text"
-                placeholder="Write name here..."
+                placeholder="Nami..."
                 value="Player4"
                 id="name4"
               />
             </div>
           </div>
         </div>
-        <button class="startBtn" onclick="back()">Back</button>
-        <button class="startBtn next" onclick="next()">NEXT</button>
+
+        <hr style="width: 80%; margin: 20px auto; opacity: 0.3" />
+
+        <div class="difficulty-selection">
+          <h3 style="margin-bottom: 15px; font-family: sans-serif">
+            Pilih Tingkat Kesulitan Game:
+          </h3>
+          <div class="choose" style="justify-content: center; gap: 15px">
+            <div
+              class="selectBox difficultyBox"
+              id="diff-easy"
+              onclick="setGameDifficulty('easy')"
+            >
+              <span>Mudah</span>
+            </div>
+
+            <div
+              class="selectBox difficultyBox selected"
+              id="diff-standard"
+              onclick="setGameDifficulty('standard')"
+            >
+              <span>Standar</span>
+            </div>
+
+            <div
+              class="selectBox difficultyBox"
+              id="diff-hard"
+              onclick="setGameDifficulty('hard')"
+            >
+              <span>Sulit</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px">
+          <button class="startBtn" onclick="back()">Kembali</button>
+          <button class="startBtn next" onclick="next()">MULAI GAME</button>
+        </div>
       </div>
     </div>
     <div class="screen" id="screen3">
       <!-- Game board player status and many more -->
       <div class="container">
+        <button class="info-btn" onclick="openInfoModal()">
+          <span class="material-symbols-outlined">info</span>
+        </button>
         <div class="boardArea">
           <div class="bigBoard">
-            <img src="images/board.png" class="board" />
+            <img src="images/board.jpeg" class="board" />
             <div class="potsBoard" id="board"></div>
           </div>
         </div>
@@ -239,6 +336,67 @@
     <audio src="audio/dice.mp3" id="diceAudio" style="display: none"></audio>
     <audio src="audio/success.mp3" id="success" style="display: none"></audio>
 
+    <div class="modal hide" id="infoModal">
+      <div class="modalBody" style="max-width: 600px; text-align: left">
+        <h1 style="text-align: center; margin-bottom: 25px; color: #2c3e50">
+          Informasi Kotak
+        </h1>
+
+        <div class="info-item">
+          <div class="info-color tile-easy"></div>
+          <div class="info-text">
+            <span class="info-title">Kotak Hijau (Mudah)</span>
+            <p>
+              Berisi soal kategori mudah. Jika benar, maju 1 langkah. Jika
+              salah, tetap di tempat.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-color tile-standard"></div>
+          <div class="info-text">
+            <span class="info-title">Kotak Kuning (Standar)</span>
+            <p>
+              Berisi soal kategori standar. Jika benar, maju 1 langkah. Jika
+              salah, tetap di tempat.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-color tile-hard"></div>
+          <div class="info-text">
+            <span class="info-title">Kotak Merah (Sulit)</span>
+            <p>
+              Berisi soal kategori sulit. Jika benar, maju 1 langkah. Jika
+              salah, tetap di tempat.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-color tile-mystery"></div>
+          <div class="info-text">
+            <span class="info-title">Kotak Ungu (Misteri)</span>
+            <p>Berisi soal analisis/tantangan khusus.</p>
+            <div class="info-reward">
+              <span class="correct-text">✓ Benar: Maju 3 langkah</span>
+              <span class="wrong-text">✗ Salah: Mundur 1 langkah</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="startBtn"
+          onclick="closeInfoModal()"
+          style="width: 100%; margin-top: 20px"
+        >
+          Mengerti
+        </button>
+      </div>
+    </div>
+
     <!-- Modal untuk pertanyaan -->
     <div class="modal hide" id="questionModal">
       <div class="modalBody" style="max-width: 600px">
@@ -278,24 +436,127 @@
             </div>
           </div>
 
-          <!-- Essay -->
           <div id="essayInput" style="display: none">
-            <textarea
-              id="essayAnswer"
-              placeholder="Tulis jawaban..."
-              rows="4"
-            ></textarea>
-            <button class="submit-btn">Submit</button>
+            <p
+              id="essayInstruction"
+              style="margin-bottom: 10px; font-weight: bold"
+            >
+              Tuliskan jawaban Anda:
+            </p>
+
+            <div
+              class="input-wrapper"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 20px;
+              "
+            >
+              <span
+                id="leftBrace"
+                style="
+                  display: none;
+                  font-size: 2.5rem;
+                  color: #3498db;
+                  font-family: 'Courier New', Courier, monospace;
+                "
+                >{</span
+              >
+
+              <math-field
+                id="mathAnswerField"
+                virtual-keyboard-mode="onfocus"
+                virtual-keyboard-policy="manual"
+                style="
+                  display: none;
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 8px;
+                  border: 2px solid #ddd;
+                  background: white;
+                "
+              ></math-field>
+
+              <textarea
+                id="textAnswerField"
+                rows="3"
+                style="
+                  display: none;
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 8px;
+                  border: 2px solid #ddd;
+                  font-family: sans-serif;
+                "
+                placeholder="Ketik penjelasan di sini..."
+              ></textarea>
+
+              <span
+                id="rightBrace"
+                style="
+                  display: none;
+                  font-size: 2.5rem;
+                  color: #3498db;
+                  font-family: 'Courier New', Courier, monospace;
+                "
+                >}</span
+              >
+            </div>
+
+            <button class="submit-btn" style="width: 100%">
+              Kirim Jawaban
+            </button>
           </div>
 
-          <!-- What If -->
           <div id="whatIfInput" style="display: none">
-            <textarea
-              id="whatIfAnswer"
-              placeholder="Jawab pertanyaan..."
-              rows="4"
-            ></textarea>
-            <button class="submit-btn">Submit</button>
+            <p
+              id="whatIfInstruction"
+              style="margin-bottom: 10px; font-weight: bold"
+            >
+              Analisis situasi ini:
+            </p>
+
+            <div
+              class="input-wrapper"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 20px;
+              "
+            >
+              <math-field
+                id="whatIfMathField"
+                virtual-keyboard-mode="onfocus"
+                style="
+                  display: none;
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 8px;
+                  border: 2px solid #ddd;
+                  background: white;
+                "
+              ></math-field>
+
+              <textarea
+                id="whatIfAnswer"
+                rows="3"
+                style="
+                  display: none;
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 8px;
+                  border: 2px solid #ddd;
+                  font-family: sans-serif;
+                "
+                placeholder="Ketik jawaban analisis Anda di sini..."
+              ></textarea>
+            </div>
+
+            <button class="submit-btn" style="width: 100%">Submit</button>
           </div>
         </div>
 
@@ -336,6 +597,29 @@
       </div>
     </div>
 
+    <div id="rotate-warning">
+      <div class="warning-content">
+        <span class="material-symbols-outlined" style="font-size: 64px"
+          >screen_rotation</span
+        >
+        <p>Mohon putar perangkat Anda ke mode Landscape untuk bermain.</p>
+      </div>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+      // Konfigurasi MathLive agar keyboard bisa berinteraksi di dalam modal
+      if (window.mathVirtualKeyboard) {
+        window.mathVirtualKeyboard.container = document.body;
+      }
+
+      // Tambahkan event listener global untuk memastikan math-field siap
+      document.addEventListener("focusin", (e) => {
+        if (e.target.tagName === "MATH-FIELD") {
+          // Mencegah modal "mencuri" fokus kembali
+          e.stopPropagation();
+        }
+      });
+    </script>
   </body>
 </html>

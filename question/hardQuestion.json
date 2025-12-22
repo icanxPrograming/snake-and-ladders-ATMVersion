@@ -124,91 +124,106 @@
     {
       "id": "H-ES-01",
       "question": "Dua dadu dilempar bersamaan. Tentukan peluang jumlah mata dadu sama dengan 8!",
-      "answer": "Pasangan (2,6),(3,5),(4,4),(5,3),(6,2) → 5/36",
+      "answer": "Pasangan: (2,6), (3,5), (4,4), (5,3), (6,2). P = \\frac{5}{36}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-02",
       "question": "Sebuah koin dilempar 3 kali. Tentukan peluang muncul minimal dua gambar!",
-      "answer": "4/8 = 1/2",
+      "answer": "P = \\frac{4}{8} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-03",
       "question": "Dalam kotak terdapat 4 bola merah dan 6 bola putih. Diambil satu bola secara acak. Tentukan peluang tidak terambil bola merah!",
-      "answer": "6/10 = 3/5",
+      "answer": "P = \\frac{6}{10} = \\frac{3}{5}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-04",
       "question": "Sebuah dadu dilempar satu kali. A = muncul angka ganjil, B = muncul angka prima. Tentukan P(A ∩ B)!",
-      "answer": "2/6 = 1/3",
+      "answer": "P(A \\cap B) = \\frac{2}{6} = \\frac{1}{3}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-05",
       "question": "Jelaskan mengapa kejadian muncul angka genap dan muncul angka kelipatan 4 termasuk kejadian tidak saling lepas!",
-      "answer": "Karena angka 4 termasuk genap dan kelipatan 4 sehingga bisa terjadi bersamaan.",
+      "answer": "Karena angka 4 termasuk genap dan kelipatan 4, sehingga bisa terjadi bersamaan.",
+      "input_type": "text",
       "time_limit": 70
     },
     {
       "id": "H-ES-06",
       "question": "Suatu kejadian memiliki peluang 0,25. Jika percobaan dilakukan 400 kali, tentukan frekuensi harapannya!",
-      "answer": "400 × 0,25 = 100",
+      "answer": "Fh = 400 \\times 0,25 = 100",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-07",
       "question": "Dua dadu dilempar. Tentukan peluang jumlah mata dadu kurang dari 5 atau lebih dari 9!",
-      "answer": "1/3",
+      "answer": "P = \\frac{1}{3}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-08",
       "question": "Sebuah dadu dilempar 300 kali. Berapa frekuensi harapan muncul angka lebih dari 4?",
-      "answer": "300 × 1/3 = 100",
+      "answer": "Fh = 300 \\times \\frac{1}{3} = 100",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-09",
       "question": "Pada pelemparan dua koin, tentukan peluang muncul minimal satu angka!",
-      "answer": "1 − 1/4 = 3/4",
+      "answer": "1 - P(tidak ada angka) = 1 - \\frac{1}{4} = \\frac{3}{4}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-10",
       "question": "Dari sebuah kelas berisi 40 siswa, 18 siswa suka Matematika dan 12 siswa suka IPA, serta 5 siswa suka keduanya. Tentukan peluang terpilih siswa yang suka Matematika atau IPA!",
-      "answer": "25/40 = 5/8",
+      "answer": "P = \\frac{25}{40} = \\frac{5}{8}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-11",
       "question": "Dadu dilempar. Tentukan peluang angka kurang dari 4 jika diketahui ganjil!",
-      "answer": "2/3",
+      "answer": "P = \\frac{2}{3}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-12",
       "question": "Tiga koin dilempar bersamaan. Tentukan peluang semua sisi sama!",
-      "answer": "2/8 = 1/4",
+      "answer": "n(A) = \\frac{2}{8} = \\frac{1}{4}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-13",
       "question": "Dari angka 1–9 dipilih satu angka. Tentukan peluang terambil angka komposit atau ganjil!",
-      "answer": "7/9",
+      "answer": "P = \\frac{7}{9}",
+      "input_type": "math",
       "time_limit": 70
     },
     {
       "id": "H-ES-14",
       "question": "Jelaskan hubungan antara peluang dan frekuensi harapan!",
       "answer": "Frekuensi harapan diperoleh dari peluang dikali banyaknya percobaan.",
+      "input_type": "text",
       "time_limit": 70
     },
     {
       "id": "H-ES-15",
       "question": "Sebuah kejadian memiliki frekuensi harapan 40 dari 200 percobaan. Tentukan peluang kejadian tersebut!",
-      "answer": "40/200 = 1/5",
+      "answer": "P = \\frac{40}{200} = \\frac{1}{5}",
+      "input_type": "math",
       "time_limit": 70
     }
   ]

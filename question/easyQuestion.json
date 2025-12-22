@@ -101,109 +101,127 @@
     {
       "id": "E-ES-01",
       "question": "Tuliskan ruang sampel dari pelemparan satu koin!",
-      "answer": "{angka, gambar}",
+      "answer": "n(S) = {angka, gambar}",
+      "input_type": "set",
       "time_limit": 45
     },
     {
       "id": "E-ES-02",
       "question": "Tuliskan ruang sampel dari pelemparan satu dadu!",
-      "answer": "{1, 2, 3, 4, 5, 6}",
+      "answer": "n(S) = {1, 2, 3, 4, 5, 6}",
+      "input_type": "set",
       "time_limit": 45
     },
     {
       "id": "E-ES-03",
       "question": "Tentukan peluang muncul angka 3 pada satu kali pelemparan dadu!",
-      "answer": "1/6",
+      "answer": "P = \\frac{1}{6}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-04",
       "question": "Tentukan peluang muncul angka genap pada dadu!",
-      "answer": "3/6 = 1/2",
+      "answer": "P = \\frac{3}{6} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-05",
       "question": "Jelaskan pengertian peluang secara singkat!",
       "answer": "Peluang adalah ukuran kemungkinan terjadinya suatu kejadian.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "E-ES-06",
       "question": "Apa yang dimaksud dengan ruang sampel?",
       "answer": "Ruang sampel adalah kumpulan semua hasil yang mungkin terjadi.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "E-ES-07",
       "question": "Dalam pelemparan satu koin, apakah kejadian muncul gambar dan angka saling lepas?",
       "answer": "Ya, saling lepas.",
+      "input_type": "text",
       "time_limit": 45
     },
     {
       "id": "E-ES-08",
       "question": "Sebuah dadu dilempar 60 kali. Tentukan frekuensi harapan muncul angka 6!",
-      "answer": "P(6) = 1/6, Fh = 60 × 1/6 = 10",
+      "answer": "P(6) = \\frac{1}{6}, Fh = 60 \\times \\frac{1}{6} = 10",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "E-ES-09",
       "question": "Tuliskan rumus peluang kejadian A!",
-      "answer": "P(A) = n(A) / n(S)",
+      "answer": "P(A) = \\frac{n(A)}{n(S)}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-10",
       "question": "Tuliskan rumus frekuensi harapan!",
-      "answer": "Fh = n × P(A)",
+      "answer": "Fh = n \\times P(A)",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-11",
       "question": "Dalam kotak terdapat 2 bola merah dan 2 bola putih. Tentukan peluang terambil bola merah!",
-      "answer": "2/4 = 1/2",
+      "answer": "P = \\frac{2}{4} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-12",
       "question": "Jika peluang suatu kejadian adalah 1, apa artinya?",
-      "answer": "Kejadian tersebut pasti terjadi.",
+      "answer": "Kejadian tersebut pasti terjadi",
+      "input_type": "text",
       "time_limit": 45
     },
     {
       "id": "E-ES-13",
       "question": "Tentukan peluang muncul angka ganjil pada dadu!",
-      "answer": "3/6 = 1/2",
+      "answer": "P = \\frac{3}{6} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-14",
       "question": "Nilai peluang suatu kejadian selalu berada di antara angka berapa?",
       "answer": "0 dan 1",
+      "input_type": "text",
       "time_limit": 45
     },
     {
       "id": "E-ES-15",
       "question": "Apakah kejadian “muncul angka 2” dan “muncul angka genap” saling lepas?",
-      "answer": "Tidak, karena dapat terjadi bersamaan.",
+      "answer": "Tidak, karena bisa terjadi bersamaan.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "E-ES-16",
       "question": "Tentukan peluang muncul angka kurang dari 4 pada dadu!",
-      "answer": "3/6 = 1/2",
+      "answer": "P = \\frac{3}{6} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 45
     },
     {
       "id": "E-ES-17",
       "question": "Tuliskan contoh kejadian saling lepas!",
       "answer": "Muncul angka dan gambar pada satu kali lempar koin.",
+      "input_type": "text",
       "time_limit": 45
     },
     {
       "id": "E-ES-18",
       "question": "Dari 10 siswa, 4 siswa suka membaca. Tentukan peluang terpilih siswa yang suka membaca!",
-      "answer": "4/10 = 2/5",
+      "answer": "P = \\frac{4}{10} = \\frac{2}{5}",
+      "input_type": "math",
       "time_limit": 60
     }
   ]

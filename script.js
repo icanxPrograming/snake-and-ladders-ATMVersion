@@ -1,3 +1,121 @@
+let globalGameDifficulty = "standard"; // Default
+let specialTiles = {
+  easy: [],
+  standard: [],
+  hard: [],
+  mystery: [],
+};
+
+// Bobot probabilitas pengambilan soal berdasarkan tingkat kesulitan game yang dipilih
+const difficultyWeights = {
+  easy: { easy: 0.6, standard: 0.25, hard: 0.1, mystery: 0.05 },
+  standard: { easy: 0.25, standard: 0.5, hard: 0.15, mystery: 0.1 },
+  hard: { easy: 0.1, standard: 0.2, hard: 0.4, mystery: 0.3 },
+};
+
+// Fungsi untuk memilih tingkat kesulitan (Memperbaiki tombol yang tidak bisa diklik)
+const setGameDifficulty = (level) => {
+  // 1. Simpan ke variabel global
+  globalGameDifficulty = level;
+  console.log("Memilih kesulitan:", level);
+
+  // 2. Ambil semua tombol difficulty
+  const easyBtn = document.getElementById("diff-easy");
+  const stdBtn = document.getElementById("diff-standard");
+  const hardBtn = document.getElementById("diff-hard");
+
+  // 3. Hapus class selected dari semuanya secara manual (paling aman)
+  if (easyBtn) easyBtn.classList.remove("selected");
+  if (stdBtn) stdBtn.classList.remove("selected");
+  if (hardBtn) hardBtn.classList.remove("selected");
+
+  // 4. Tambahkan ke yang diklik
+  const currentBtn = document.getElementById(`diff-${level}`);
+  if (currentBtn) {
+    currentBtn.classList.add("selected");
+  }
+};
+
+// Fungsi untuk mengatur urutan visual kartu pemain
+const adjustPlayerLayout = () => {
+  const isDesktop = window.innerWidth > 768;
+
+  for (let i = 1; i <= 4; i++) {
+    const card = document.getElementById(`playerCard${i}`);
+    if (!card) continue;
+
+    if (playersCount === 4 && isDesktop) {
+      // DESKTOP BESAR (2x2 Clockwise)
+      // Baris 1: P1(order 1), P2(order 2)
+      // Baris 2: P4(order 3), P3(order 4)
+      if (i === 1) card.style.order = "1";
+      if (i === 2) card.style.order = "2";
+      if (i === 4) card.style.order = "3";
+      if (i === 3) card.style.order = "4";
+
+      card.style.flex = "0 1 45%";
+    } else {
+      // MOBILE atau Player < 4 (Linear / Normal)
+      card.style.order = i.toString();
+      card.style.flex = isDesktop ? "0 1 45%" : "1 1 100%";
+
+      // Jika hanya 2 player di desktop, biarkan 2 kolom sejajar
+      if (playersCount <= 2 && isDesktop) {
+        card.style.flex = "0 1 45%";
+      }
+    }
+  }
+};
+
+// Jalankan saat resize
+window.addEventListener("resize", adjustPlayerLayout);
+
+const generateSpecialTiles = () => {
+  const allNumbers = Array.from({ length: 98 }, (_, i) => i + 2); // Kotak 2-99
+  const shuffled = allNumbers.sort(() => 0.5 - Math.random());
+
+  // Tentukan jumlah kotak berdasarkan globalGameDifficulty
+  let counts = { easy: 10, standard: 10, hard: 10, mystery: 10 };
+
+  if (globalGameDifficulty === "easy") {
+    counts = { easy: 20, standard: 10, hard: 5, mystery: 5 };
+  } else if (globalGameDifficulty === "standard") {
+    counts = { easy: 10, standard: 15, hard: 10, mystery: 5 };
+  } else if (globalGameDifficulty === "hard") {
+    counts = { easy: 5, standard: 10, hard: 15, mystery: 10 };
+  }
+
+  specialTiles.easy = shuffled.slice(0, counts.easy);
+  specialTiles.standard = shuffled.slice(
+    counts.easy,
+    counts.easy + counts.standard
+  );
+  specialTiles.hard = shuffled.slice(
+    counts.easy + counts.standard,
+    counts.easy + counts.standard + counts.hard
+  );
+  specialTiles.mystery = shuffled.slice(
+    counts.easy + counts.standard + counts.hard,
+    counts.easy + counts.standard + counts.hard + counts.mystery
+  );
+};
+
+// Fungsi untuk membuka modal informasi
+const openInfoModal = () => {
+  const infoModal = document.getElementById("infoModal");
+  if (infoModal) {
+    infoModal.classList.remove("hide");
+  }
+};
+
+// Fungsi untuk menutup modal informasi
+const closeInfoModal = () => {
+  const infoModal = document.getElementById("infoModal");
+  if (infoModal) {
+    infoModal.classList.add("hide");
+  }
+};
+
 const board = document.querySelector("#board");
 
 // Warna pot untuk masing-masing player
@@ -17,21 +135,17 @@ const wimg = document.querySelector("#wimg");
 
 // Ladders & Snakes
 let ladders = [
-  [4, 16, 17, 25],
-  [21, 39],
-  [29, 32, 33, 48, 53, 67, 74],
-  [43, 57, 64, 76],
-  [63, 62, 79, 80],
-  [71, 89],
+  [4, 18, 24, 38],
+  [13, 32],
+  [44, 63],
+  [53, 73],
+  [56, 65, 75, 86, 95],
 ];
 let snakes = [
-  [30, 12, 13, 7],
-  [47, 46, 36, 35, 27, 15],
-  [56, 44, 38, 23, 19],
-  [73, 69, 51],
-  [82, 79, 62, 59, 42],
-  [92, 88, 75],
-  [98, 97, 83, 84, 85, 77, 64, 76, 65, 55],
+  [36, 25, 26, 15, 27],
+  [60, 42, 39, 22],
+  [71, 69, 52, 68, 53],
+  [99, 82, 83, 78, 77],
 ];
 
 // Dice
@@ -385,20 +499,30 @@ const askQuestionBeforeMove = (playerNo, diceNumber) => {
 };
 
 const setupQuestionByType = (q) => {
-  // Multiple Choice
+  // Ambil semua elemen input essay
+  const es = document.getElementById("essayInput");
+  const mathField = document.getElementById("mathAnswerField");
+  const textField = document.getElementById("textAnswerField");
+  const leftBrace = document.getElementById("leftBrace");
+  const rightBrace = document.getElementById("rightBrace");
+  const instruction = document.getElementById("essayInstruction");
+
+  // Sembunyikan semua opsi terlebih dahulu
+  document.getElementById("mcOptions").style.display = "none";
+  document.getElementById("tfOptions").style.display = "none";
+  document.getElementById("essayInput").style.display = "none";
+  document.getElementById("whatIfInput").style.display = "none";
+
+  // --- LOGIK MULTIPLE CHOICE ---
   if (q.type === "multiple_choice" && q.options) {
     const mc = document.getElementById("mcOptions");
     mc.style.display = "block";
     const optionEls = mc.querySelectorAll(".option");
-
     optionEls.forEach((opt, idx) => {
       if (idx < q.options.length) {
         opt.style.display = "flex";
-        // Perbaikan: Ambil span kedua di dalam option
         const optionTextSpan = opt.querySelector("span:nth-child(2)");
-        if (optionTextSpan) {
-          optionTextSpan.textContent = q.options[idx];
-        }
+        if (optionTextSpan) optionTextSpan.textContent = q.options[idx];
         opt.onclick = () => selectAnswer(idx);
         opt.classList.remove("selected");
       } else {
@@ -406,46 +530,106 @@ const setupQuestionByType = (q) => {
       }
     });
   }
-  // True/False
+
+  // --- LOGIK TRUE / FALSE ---
   else if (q.type === "true_false") {
     const tf = document.getElementById("tfOptions");
     tf.style.display = "block";
     const tfOpts = tf.querySelectorAll(".option");
-
     tfOpts[0].onclick = () => selectAnswer(true);
     tfOpts[1].onclick = () => selectAnswer(false);
     tfOpts.forEach((opt) => opt.classList.remove("selected"));
   }
-  // Essay
-  else if (q.type === "essay") {
-    const es = document.getElementById("essayInput");
-    es.style.display = "block";
-    const essayAnswer = document.getElementById("essayAnswer");
-    if (essayAnswer) essayAnswer.value = "";
 
-    // Setup submit button
+  // --- LOGIK ESSAY (MODIFIKASI BARU) ---
+  else if (q.type === "essay") {
+    es.style.display = "block";
+
+    // Reset visibilitas elemen internal essay
+    mathField.style.display = "none";
+    textField.style.display = "none";
+    leftBrace.style.display = "none";
+    rightBrace.style.display = "none";
+
+    // Cek tipe input dari JSON
+    if (q.input_type === "math" || q.input_type === "set") {
+      // Tampilkan MathField (MathLive)
+      mathField.style.display = "block";
+      mathField.value = "";
+      mathField.readOnly = false;
+      instruction.textContent = "Tuliskan jawaban matematika Anda:";
+
+      // Jika tipe set, tampilkan kurung kurawal { }
+      if (q.input_type === "set") {
+        leftBrace.style.display = "block";
+        rightBrace.style.display = "block";
+        instruction.textContent = "Lengkapi isi himpunan berikut:";
+      }
+
+      setTimeout(() => mathField.focus(), 300);
+    } else {
+      // Tipe Text (Keyboard Biasa)
+      textField.style.display = "block";
+      textField.value = "";
+      instruction.textContent = "Jelaskan jawaban Anda secara singkat:";
+      setTimeout(() => textField.focus(), 300);
+    }
+
+    // Handle Tombol Submit Essay
     const submitBtn = es.querySelector(".submit-btn");
     if (submitBtn) {
       submitBtn.onclick = () => {
-        const answer = document.getElementById("essayAnswer").value.trim();
+        let answer = "";
+        if (q.input_type === "math" || q.input_type === "set") {
+          answer = mathField.value.trim(); // Hasil berupa LaTeX
+        } else {
+          answer = textField.value.trim(); // Hasil teks biasa
+        }
+
         if (answer && currentQuestion) {
           submitAnswer(currentQuestion, answer);
         }
       };
     }
   }
-  // What If
+
+  // --- LOGIK WHAT IF ---
   else if (q.type === "what_if") {
     const wi = document.getElementById("whatIfInput");
-    wi.style.display = "block";
-    const whatIfAnswer = document.getElementById("whatIfAnswer");
-    if (whatIfAnswer) whatIfAnswer.value = "";
+    const wiMathField = document.getElementById("whatIfMathField");
+    const wiTextField = document.getElementById("whatIfAnswer");
+    const wiInstruction = document.getElementById("whatIfInstruction");
 
-    // Setup submit button
+    wi.style.display = "block";
+
+    // Reset tampilan input dalam What If
+    wiMathField.style.display = "none";
+    wiTextField.style.display = "none";
+
+    // Cek tipe input dari JSON Mystery
+    if (q.input_type === "math") {
+      wiMathField.style.display = "block";
+      mathField.readOnly = false;
+      wiMathField.value = "";
+      wiInstruction.textContent = "Berikan nilai peluang yang tepat:";
+      setTimeout(() => wiMathField.focus(), 300);
+    } else {
+      wiTextField.style.display = "block";
+      wiTextField.value = "";
+      wiInstruction.textContent = "Apa yang terjadi jika...";
+      setTimeout(() => wiTextField.focus(), 300);
+    }
+
     const submitBtn = wi.querySelector(".submit-btn");
     if (submitBtn) {
       submitBtn.onclick = () => {
-        const answer = document.getElementById("whatIfAnswer").value.trim();
+        let answer = "";
+        if (q.input_type === "math") {
+          answer = wiMathField.value.trim(); // Ambil dari MathLive
+        } else {
+          answer = wiTextField.value.trim(); // Ambil dari Textarea
+        }
+
         if (answer && currentQuestion) {
           submitAnswer(currentQuestion, answer);
         }
@@ -500,6 +684,57 @@ const handleTimeout = () => {
   }
 };
 
+const checkEssayAnswer = (userAns, correctAns, type) => {
+  if (!userAns || !correctAns) return false;
+
+  const clean = (s) =>
+    s
+      .toString()
+      .toLowerCase()
+      .replace(/[\s\\{}()]/g, "") // Hapus spasi, backslash, kurung
+      .replace(/n\(s\)=/g, "") // Hapus format n(S)
+      .replace(/p=/g, "") // Hapus format P =
+      .replace(/fh=/g, "") // Hapus format Fh =
+      .replace(/frac/g, "") // Hapus simbol LaTeX frac
+      .replace(/times/g, "x") // Normalisasi perkalian
+      .replace(/×/g, "x")
+      .replace(/=/g, "") // Hapus sama dengan sisanya
+      .trim();
+
+  let u = clean(userAns);
+  let c = clean(correctAns);
+
+  // Jika jawaban kosong setelah dibersihkan, anggap salah
+  if (u === "") return false;
+
+  if (type === "math" || type === "set") {
+    // 1. Cek apakah sama persis setelah dibersihkan
+    if (u === c) return true;
+
+    // 2. Jika kunci punya beberapa tahap (misal 3/6=1/2), pecah berdasarkan '='
+    // Kita cek apakah jawaban user cocok dengan salah satu bagian
+    if (correctAns.includes("=")) {
+      const parts = correctAns.split("=").map((p) => clean(p));
+      return parts.some((part) => part === u && u !== "");
+    }
+
+    return u === c;
+  }
+
+  // --- Tipe Text (Penjelasan) ---
+  // Gunakan perbandingan yang sedikit lebih longgar untuk kalimat
+  if (type === "text") {
+    // Jika jawaban user hampir sama panjangnya dan terkandung di kunci, atau sebaliknya
+    // Tapi minimal 5 karakter agar tidak asal menebak satu huruf
+    if (u.length < 3) return u === c;
+    return (
+      (c.includes(u) || u.includes(c)) && Math.abs(u.length - c.length) < 20
+    );
+  }
+
+  return u === c;
+};
+
 // ===== Submit jawaban =====
 const submitAnswer = (question, answer) => {
   console.log(`submitAnswer called, isProcessingAnswer: ${isProcessingAnswer}`);
@@ -520,18 +755,21 @@ const submitAnswer = (question, answer) => {
   if (!question) {
     correct = false;
     message = "Soal tidak valid";
-  } else if (question.type === "multiple_choice") {
+  }
+  // Untuk pilihan ganda dan benar/salah, perbandingan tetap kaku (exact match)
+  else if (
+    question.type === "multiple_choice" ||
+    question.type === "true_false"
+  ) {
     correct = answer === question.answer;
     message = correct ? "Jawaban benar!" : "Jawaban salah!";
-  } else if (question.type === "true_false") {
-    correct = answer === question.answer;
-    message = correct ? "Jawaban benar!" : "Jawaban salah!";
-  } else if (question.type === "essay" || question.type === "what_if") {
-    // Untuk essay dan what_if, kita bandingkan lowercase
-    const userAnswer = answer.toLowerCase().trim();
-    const correctAnswer = (question.answer || "").toLowerCase().trim();
-    correct = userAnswer === correctAnswer;
-    message = correct ? "Jawaban benar!" : "Jawaban salah!";
+  }
+  // Untuk essay dan what_if, gunakan fungsi helper checkEssayAnswer
+  else if (question.type === "essay" || question.type === "what_if") {
+    // Kita kirim 'answer' (dari user), 'question.answer' (dari JSON),
+    // dan 'question.input_type' (text/math/set)
+    correct = checkEssayAnswer(answer, question.answer, question.input_type);
+    message = correct ? "Jawaban benar!" : "Jawaban kurang tepat!";
   }
 
   // Tampilkan hasil
@@ -558,62 +796,31 @@ const submitAnswer = (question, answer) => {
     if (resultModal) resultModal.classList.add("hide");
 
     handleMoveAfterQuestion(correct);
-  }, 2000);
+  }, 3000);
 };
 
 // ===== Handle pergerakan setelah soal =====
 const handleMoveAfterQuestion = (isCorrect) => {
-  console.log(
-    `handleMoveAfterQuestion: isCorrect=${isCorrect}, player=${currentPlayerTemp}, dice=${currentDiceValue}`
-  );
-
-  // Tentukan nilai pergerakan
   let moveValue = 0;
-  let shouldMove = false;
+  const tileType = currentQuestion.tileType;
 
-  if (currentQuestion?.difficulty === "mystery") {
+  if (tileType === "mystery") {
     moveValue = isCorrect ? 3 : -1;
-    shouldMove = true;
-    console.log(`Mystery question: moving ${moveValue} steps`);
   } else {
-    if (isCorrect) {
-      moveValue = currentDiceValue;
-      shouldMove = true;
-      console.log(`Correct answer: moving ${moveValue} steps`);
-    } else {
-      // Jawaban salah, tidak bergerak
-      console.log(
-        `Player ${currentPlayerTemp} answered wrong, staying in place`
-      );
-
-      // Tunggu sebentar lalu ganti giliran
-      setTimeout(() => {
-        isRolling = false;
-        isProcessingAnswer = false;
-        console.log(`Moving to next turn from player ${currentPlayerTemp}`);
-        nextTurn();
-      }, 1000);
-      return;
-    }
+    moveValue = isCorrect ? 1 : 0;
   }
 
-  // Jika harus bergerak
-  if (shouldMove) {
-    console.log(
-      `Calling movePot: value=${moveValue}, player=${currentPlayerTemp}`
-    );
-    movePot(moveValue, currentPlayerTemp);
+  // Set flag agar sistem tahu proses jawaban sudah selesai
+  isProcessingAnswer = false;
 
-    // Hitung durasi animasi
-    const moveDuration = Math.abs(moveValue) * 400 + 800; // 400ms per langkah + buffer
-
-    // Tunggu animasi selesai lalu ganti giliran
-    setTimeout(() => {
-      isRolling = false;
-      isProcessingAnswer = false;
-      console.log(`Animation complete, moving to next turn`);
-      nextTurn();
-    }, moveDuration);
+  if (moveValue !== 0) {
+    // Jalankan movePot dengan isBonusMove = true
+    // isBonusMove = true akan memicu nextTurn() di dalam fungsi movePot itu sendiri
+    movePot(moveValue, currentPlayerTemp, true);
+  } else {
+    // Jika jawaban salah di kotak biasa (moveValue 0),
+    // langsung selesaikan giliran tanpa menunggu animasi
+    finalizeTurn(currentPlayerTemp);
   }
 };
 
@@ -665,12 +872,22 @@ const closeQuestionModal = () => {
 
 // ===== Board =====
 const drawBoard = () => {
+  generateSpecialTiles(); // Acak kotak setiap mulai
   let content = "";
   let boxCount = 101;
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       if (i % 2 === 0) boxCount--;
-      content += `<div class="box" id="potBox${boxCount}"></div>`;
+
+      let tileClass = "";
+      if (specialTiles.easy.includes(boxCount)) tileClass = "tile-easy";
+      else if (specialTiles.standard.includes(boxCount))
+        tileClass = "tile-standard";
+      else if (specialTiles.hard.includes(boxCount)) tileClass = "tile-hard";
+      else if (specialTiles.mystery.includes(boxCount))
+        tileClass = "tile-mystery";
+
+      content += `<div class="box ${tileClass}" id="potBox${boxCount}">${boxCount}</div>`;
       if (i % 2 != 0) boxCount++;
     }
     boxCount -= 10;
@@ -698,40 +915,139 @@ const updateBoard = () => {
   }
 };
 
-// ===== Move Pot =====
-const movePot = (value, playerNumber) => {
-  console.log(
-    `movePot START: Player ${playerNumber} moving ${value} steps from ${
-      players[playerNumber - 1].score
-    }`
+const checkTileTrigger = (currentScore, playerNo) => {
+  let tileDifficulty = null;
+
+  if (specialTiles.easy.includes(currentScore)) tileDifficulty = "easy";
+  else if (specialTiles.standard.includes(currentScore))
+    tileDifficulty = "standard";
+  else if (specialTiles.hard.includes(currentScore)) tileDifficulty = "hard";
+  else if (specialTiles.mystery.includes(currentScore))
+    tileDifficulty = "mystery";
+
+  if (tileDifficulty) {
+    // Pemain menginjak kotak khusus! Berikan soal.
+    askQuestionOnTile(playerNo, tileDifficulty);
+  } else {
+    // Kotak biasa, cek tangga/ular
+    checkSnakeAndLadder(currentScore, playerNo);
+
+    // PENTING: Tambahkan nextTurn() agar giliran berganti jika kotak biasa
+    // Beri sedikit delay agar animasi ular/tangga (jika ada) selesai dulu
+    setTimeout(() => {
+      console.log("Kotak biasa, pindah giliran...");
+      nextTurn();
+    }, 800);
+  }
+};
+
+const finalizeTurn = (playerNo) => {
+  isRolling = false;
+  isProcessingAnswer = false;
+  checkSnakeAndLadder(players[playerNo - 1].score, playerNo);
+  nextTurn();
+};
+
+const checkSnakeAndLadder = (score, playerNo) => {
+  checkLadder(score, playerNo);
+  checkSnake(score, playerNo);
+};
+
+const askQuestionOnTile = (playerNo, tileType) => {
+  // tileType adalah 'easy', 'standard', 'hard', atau 'mystery' (berasal dari warna kotak)
+
+  isProcessingAnswer = false;
+  currentPlayerTemp = playerNo;
+  disableAllDices();
+
+  // 1. Sembunyikan penjelasan soal sebelumnya
+  const explanationDiv = document.getElementById("explanation");
+  if (explanationDiv) explanationDiv.style.display = "none";
+
+  // 2. Ambil soal LANGSUNG dari pool yang sesuai dengan warna kotak
+  // Ini memastikan: Kotak Hijau = Soal Easy, Kotak Merah = Soal Hard, dst.
+  const pool = questionPool[tileType];
+
+  // Validasi jika pool soal tersedia
+  const availableTypes = Object.keys(pool).filter(
+    (type) => pool[type] && pool[type].length > 0
   );
 
-  if (playerNumber < 1 || playerNumber > playersCount) {
-    console.error(`Invalid player number: ${playerNumber}`);
+  if (availableTypes.length === 0) {
+    console.error(`Pool soal untuk ${tileType} kosong!`);
+    finalizeTurn(playerNo); // Skip jika tidak ada soal
     return;
   }
+
+  // Pilih tipe soal acak (multiple_choice, essay, dll)
+  const selectedType =
+    availableTypes[Math.floor(Math.random() * availableTypes.length)];
+  const questions = pool[selectedType];
+  const q = questions[Math.floor(Math.random() * questions.length)];
+
+  // Simpan data soal aktif
+  currentQuestion = {
+    ...q,
+    difficulty: tileType, // Tingkat kesulitan soal disamakan dengan tipe kotak
+    tileType: tileType, // Untuk menentukan bonus langkah nanti (3 langkah jika mystery)
+    type: selectedType,
+  };
+
+  // 3. Update UI Modal
+  const modal = document.querySelector("#questionModal");
+  const badge = document.getElementById("difficultyBadge");
+
+  // Ubah teks dan warna badge sesuai tipe kotak
+  badge.textContent = `${tileType.toUpperCase()} TILE`;
+  badge.className = `difficulty-badge ${tileType}`; // Pastikan CSS punya class .easy, .hard, dll
+
+  document.getElementById("questionText").textContent = q.question;
+
+  // 4. Timer Reset
+  const timerEl = document.getElementById("timer");
+  let timeLeft = q.time_limit || 30;
+  timerEl.textContent = timeLeft;
+  timerEl.classList.remove("warning");
+
+  if (questionTimer) clearInterval(questionTimer);
+  questionTimer = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+
+    if (timeLeft <= 10) timerEl.classList.add("warning");
+
+    if (timeLeft <= 0) {
+      clearInterval(questionTimer);
+      handleTimeout();
+    }
+  }, 1000);
+
+  // 5. Munculkan Modal & Setup Input
+  modal.classList.remove("hide");
+  setupQuestionByType(currentQuestion);
+};
+
+// ===== Move Pot yang Disesuaikan =====
+// ===== Move Pot yang Disesuaikan =====
+const movePot = (value, playerNumber, isBonusMove = false) => {
+  console.log(
+    `movePot START: Player ${playerNumber} moving ${value} (Bonus: ${isBonusMove})`
+  );
+
+  if (playerNumber < 1 || playerNumber > playersCount) return;
 
   let player = players[playerNumber - 1];
   let end = player.score + value;
 
+  // Batas papan 0-100
   if (end > 100) end = 100;
   if (end < 0) end = 0;
-
-  if (end === 100) {
-    console.log(`Player ${playerNumber} reached 100!`);
-    setTimeout(() => {
-      if (modal) modal.className = "modal";
-      if (success) success.play();
-      const baseURL = "images/avatars/";
-      if (wimg) wimg.src = baseURL + player.image + ".png";
-      if (wname) wname.innerHTML = player.name;
-    }, Math.abs(value) * 400);
-  }
 
   let i = player.score;
   const direction = value > 0 ? 1 : -1;
   const steps = Math.abs(value);
 
+  // Animasi pergerakan pion langkah demi langkah
   const t = setInterval(() => {
     if ((direction > 0 && i < end) || (direction < 0 && i > end)) {
       i += direction;
@@ -743,139 +1059,162 @@ const movePot = (value, playerNumber) => {
       updateBoard();
     } else {
       clearInterval(t);
-      console.log(`movePot END: Player ${playerNumber} now at position ${i}`);
+
+      // 1. Cek Pemenang
+      if (player.score === 100) {
+        setTimeout(() => {
+          if (modal) modal.className = "modal";
+          if (success) success.play();
+          wimg.src = `images/avatars/${player.image}.png`;
+          wname.innerHTML = player.name;
+        }, 400);
+        return;
+      }
+
+      // 2. Deteksi apakah pion menginjak kepala ular atau kaki tangga
+      const isOnLadder = ladders.some((lad) => lad[0] === player.score);
+      const isOnSnake = snakes.some((snk) => snk[0] === player.score);
+
+      // Jalankan animasi ular/tangga
+      checkSnakeAndLadder(player.score, playerNumber);
+
+      // 3. Tentukan delay berdasarkan apakah ada animasi ular/tangga atau tidak
+      // Jika ada ular/tangga, beri delay lebih lama (misal 1200ms) agar animasi selesai
+      const actionDelay = isOnLadder || isOnSnake ? 1200 : 600;
+      setTimeout(() => {
+        if (!isBonusMove) {
+          checkTileTrigger(player.score, playerNumber);
+        } else {
+          console.log("Bonus move finished, next turn...");
+          nextTurn();
+        }
+      }, actionDelay);
     }
   }, 400);
-
-  setTimeout(() => {
-    if (value > 0 && player.score > 0) {
-      checkLadder(player.score, playerNumber);
-      checkSnake(player.score, playerNumber);
-    }
-  }, 400 * steps);
 };
 
-// ===== Roll Dice =====
 const rollDice = (playerNo) => {
-  console.log(
-    `rollDice: Player ${playerNo} trying to roll. Current turn: ${currentTurnPlayer}, isRolling: ${isRolling}, isProcessingAnswer: ${isProcessingAnswer}`
-  );
-
-  if (playerNo !== currentTurnPlayer) {
-    console.log(
-      `Not player ${playerNo}'s turn. Current turn: ${currentTurnPlayer}`
-    );
+  // 1. Validasi super ketat: pastikan giliran benar dan TIDAK sedang dalam proses jalan/jawab
+  if (playerNo !== currentTurnPlayer || isRolling || isProcessingAnswer) {
+    console.log("Blokir klik dadu: Sedang proses...");
     return;
   }
 
-  if (isRolling || isProcessingAnswer) {
-    console.log(
-      `Cannot roll: isRolling=${isRolling}, isProcessingAnswer=${isProcessingAnswer}`
-    );
-    return;
-  }
+  // 2. Kunci status segera
+  isRolling = true;
 
-  // Play dice sound
+  // 3. Matikan semua dadu secara visual dan fungsional
+  disableAllDices();
+
   if (diceAudio) {
+    diceAudio.currentTime = 0;
     diceAudio.play();
   }
 
-  // Add rolling animation
   const diceElement = document.getElementById("dice" + playerNo);
-  if (diceElement) {
-    diceElement.classList.add("dice-rolling");
+  diceElement.classList.add("dice-rolling");
 
-    // Generate random dice number
-    const diceNumber = diceArray[Math.floor(Math.random() * 6)];
+  const diceNumber = diceArray[Math.floor(Math.random() * 6)];
 
-    setTimeout(() => {
-      // Update dice display
-      diceElement.innerHTML = `<i class="diceImg fas ${
-        diceIcons[diceNumber - 1]
-      }"></i>`;
-      diceElement.classList.remove("dice-rolling");
+  setTimeout(() => {
+    diceElement.innerHTML = `<i class="diceImg fas ${
+      diceIcons[diceNumber - 1]
+    }"></i>`;
+    diceElement.classList.remove("dice-rolling");
 
-      // Ask question
-      console.log(
-        `Rolled ${diceNumber}, asking question for player ${playerNo}`
-      );
-      askQuestionBeforeMove(playerNo, diceNumber);
-    }, 500);
-  }
+    // 4. Jalankan pergerakan pion
+    movePot(diceNumber, playerNo);
+  }, 500);
 };
 
 // ===== Manage turns =====
 const nextTurn = () => {
   const previousPlayer = currentTurnPlayer;
 
-  // Cari pemain berikutnya
-  let attempts = 0;
-  let nextPlayer = currentTurnPlayer;
-
-  do {
-    nextPlayer = (nextPlayer % playersCount) + 1;
-    attempts++;
-
-    // Safety check untuk infinite loop
-    if (attempts > playersCount) {
-      console.error("Infinite loop detected in nextTurn!");
-      break;
-    }
-  } while (nextPlayer === previousPlayer); // Sebenarnya tidak perlu loop karena selalu akan berbeda
-
-  console.log(`TURN CHANGE: Player ${previousPlayer} -> Player ${nextPlayer}`);
-
-  currentTurnPlayer = nextPlayer;
-
-  // Reset processing flags
+  // Reset semua flag status di awal perpindahan giliran
+  isRolling = false;
   isProcessingAnswer = false;
 
-  // Update UI
+  // Logika ganti pemain yang simpel dan aman
+  currentTurnPlayer = (currentTurnPlayer % playersCount) + 1;
+
+  console.log(
+    `TURN CHANGE: Player ${previousPlayer} -> Player ${currentTurnPlayer}`
+  );
+
+  // Update UI dan Aktifkan Dadu
   updateTurnIndicator();
   enableCurrentPlayerDice();
 };
 
 const updateTurnIndicator = () => {
-  // Remove current-turn class from all
-  document.querySelectorAll(".playerCard").forEach((card) => {
-    card.classList.remove("current-turn");
-  });
+  console.log(`Menyalakan indikator untuk Player: ${currentTurnPlayer}`);
 
-  // Add to current player
-  const currentCard = document.getElementById(`playerCard${currentTurnPlayer}`);
-  if (currentCard) {
-    currentCard.classList.add("current-turn");
-    console.log(`Turn indicator: Player ${currentTurnPlayer} highlighted`);
+  // 1. Hapus class turn dari SEMUA kartu tanpa kecuali
+  for (let i = 1; i <= 4; i++) {
+    const card = document.getElementById(`playerCard${i}`);
+    if (card) {
+      card.classList.remove("current-turn");
+      // Opsional: Pastikan opacity dadu pemain lain redup
+      const dice = document.getElementById(`dice${i}`);
+      if (dice) dice.style.opacity = "0.3";
+    }
+  }
+
+  // 2. Tambahkan class turn HANYA ke player yang sedang aktif (berdasarkan ID)
+  const activeCard = document.getElementById(`playerCard${currentTurnPlayer}`);
+  const activeDice = document.getElementById(`dice${currentTurnPlayer}`);
+
+  if (activeCard) {
+    activeCard.classList.add("current-turn");
+    console.log(`Indikator menyala di ID: playerCard${currentTurnPlayer}`);
+  }
+
+  if (activeDice) {
+    activeDice.style.opacity = "1";
   }
 };
 
 const disableAllDices = () => {
   console.log("Disabling all dices");
-  for (let i = 1; i <= playersCount; i++) {
+  // Kunci status secara logika
+  isRolling = true;
+
+  for (let i = 1; i <= 4; i++) {
     const diceEl = document.getElementById("dice" + i);
     if (diceEl) {
       diceEl.classList.add("disabled");
       diceEl.style.cursor = "not-allowed";
+      diceEl.style.pointerEvents = "none"; // Paling ampuh mencegah double click
+      diceEl.style.opacity = "0.3";
     }
   }
 };
 
 const enableCurrentPlayerDice = () => {
-  console.log(`Enabling dices: currentTurnPlayer=${currentTurnPlayer}`);
+  console.log(`Enabling dices for current player: ${currentTurnPlayer}`);
 
-  // Reset semua dadu
-  for (let i = 1; i <= playersCount; i++) {
+  // Pastikan status rolling sudah mati
+  isRolling = false;
+
+  for (let i = 1; i <= 4; i++) {
     const diceEl = document.getElementById("dice" + i);
     if (diceEl) {
-      const isCurrentPlayer = i === currentTurnPlayer;
-      diceEl.classList.remove("disabled");
-      diceEl.style.cursor = isCurrentPlayer ? "pointer" : "not-allowed";
-      diceEl.style.opacity = isCurrentPlayer ? "1" : "0.5";
+      const isCurrent = i === currentTurnPlayer;
+
+      if (isCurrent) {
+        diceEl.classList.remove("disabled");
+        diceEl.style.cursor = "pointer";
+        diceEl.style.pointerEvents = "auto"; // Izinkan klik
+        diceEl.style.opacity = "1";
+      } else {
+        diceEl.classList.add("disabled");
+        diceEl.style.cursor = "not-allowed";
+        diceEl.style.pointerEvents = "none"; // Tetap kunci yang lain
+        diceEl.style.opacity = "0.3";
+      }
     }
   }
-
-  // Update turn indicator
-  updateTurnIndicator();
 };
 
 // ===== Ladder & Snake =====
@@ -934,20 +1273,29 @@ const selectPlayers = (value) => {
 const start = () => {
   screen1.style.display = "none";
   screen2.style.display = "block";
+  // Set default secara programatis agar UI konsisten
+  setGameDifficulty("standard");
   hideUnwantedPlayers();
 };
 
 const back = () => {
   screen2.style.display = "none";
   screen1.style.display = "block";
+  // Bersihkan pilihan agar tidak ambigu saat masuk lagi
+  document
+    .querySelectorAll(".difficultyBox")
+    .forEach((b) => b.classList.remove("selected"));
   resetPlayersCount();
 };
 
 const next = () => {
   screen2.style.display = "none";
   screen3.style.display = "block";
+  drawBoard();
   hideFinalPlayers();
   displayNames();
+  // ATUR LAYOUT DI SINI
+  adjustPlayerLayout();
   updateTurnIndicator();
   enableCurrentPlayerDice();
   updateBoard();
@@ -1031,16 +1379,35 @@ const updateValue = (playerNo) => {
 let isSubmitting = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Setup event listeners untuk tombol submit dengan debouncing
-  const essaySubmitBtn = document.querySelector("#essayInput .submit-btn");
-  const whatIfSubmitBtn = document.querySelector("#whatIfInput .submit-btn");
+  // Fungsi Helper untuk mengambil jawaban berdasarkan input yang sedang aktif
+  const getActiveAnswer = () => {
+    if (!currentQuestion) return "";
+
+    if (currentQuestion.type === "essay") {
+      // Jika soal matematika/set, ambil dari MathField
+      if (
+        currentQuestion.input_type === "math" ||
+        currentQuestion.input_type === "set"
+      ) {
+        return document.getElementById("mathAnswerField").value;
+      }
+      // Jika soal penjelasan, ambil dari Textarea
+      else {
+        return document.getElementById("textAnswerField").value;
+      }
+    } else if (currentQuestion.type === "what_if") {
+      if (currentQuestion.input_type === "math") {
+        return document.getElementById("whatIfMathField").value;
+      } else {
+        return document.getElementById("whatIfAnswer").value;
+      }
+    }
+    return "";
+  };
 
   const createDebouncedHandler = (callback) => {
     return () => {
-      if (isSubmitting || isProcessingAnswer) {
-        console.log("Already submitting or processing, please wait...");
-        return;
-      }
+      if (isSubmitting || isProcessingAnswer) return;
       isSubmitting = true;
       setTimeout(() => {
         isSubmitting = false;
@@ -1049,14 +1416,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   };
 
+  // 1. Listeners untuk tombol Submit
+  const essaySubmitBtn = document.querySelector("#essayInput .submit-btn");
+  const whatIfSubmitBtn = document.querySelector("#whatIfInput .submit-btn");
+
   if (essaySubmitBtn) {
     essaySubmitBtn.addEventListener(
       "click",
       createDebouncedHandler(() => {
-        const answer = document.getElementById("essayAnswer")?.value.trim();
-        if (answer && currentQuestion) {
-          submitAnswer(currentQuestion, answer);
-        }
+        const answer = getActiveAnswer();
+        if (answer) submitAnswer(currentQuestion, answer);
       })
     );
   }
@@ -1065,57 +1434,44 @@ document.addEventListener("DOMContentLoaded", () => {
     whatIfSubmitBtn.addEventListener(
       "click",
       createDebouncedHandler(() => {
-        const answer = document.getElementById("whatIfAnswer")?.value.trim();
-        if (answer && currentQuestion) {
-          submitAnswer(currentQuestion, answer);
-        }
+        const answer = getActiveAnswer();
+        if (answer) submitAnswer(currentQuestion, answer);
       })
     );
   }
 
-  // Enter key untuk textarea
-  const essayTextarea = document.getElementById("essayAnswer");
-  const whatIfTextarea = document.getElementById("whatIfAnswer");
+  // 2. Listeners untuk Tombol Enter pada Keyboard Fisik
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter" && !e.shiftKey && currentQuestion) {
+      if (isSubmitting || isProcessingAnswer) return;
 
-  const handleEnterKey = (callback) => {
-    return (e) => {
-      if (e.key === "Enter" && !e.shiftKey && currentQuestion) {
+      // Untuk MathField, Enter biasanya sudah dihandle MathLive,
+      // tapi kita tambahkan manual agar konsisten
+      const answer = getActiveAnswer();
+      if (answer) {
         e.preventDefault();
-        if (isSubmitting || isProcessingAnswer) return;
-
         isSubmitting = true;
         setTimeout(() => {
           isSubmitting = false;
         }, 1000);
-
-        callback();
+        submitAnswer(currentQuestion, answer);
       }
-    };
+    }
   };
 
-  if (essayTextarea) {
-    essayTextarea.addEventListener(
-      "keypress",
-      handleEnterKey(() => {
-        const answer = essayTextarea.value.trim();
-        if (answer) {
-          submitAnswer(currentQuestion, answer);
-        }
-      })
-    );
-  }
-
-  if (whatIfTextarea) {
-    whatIfTextarea.addEventListener(
-      "keypress",
-      handleEnterKey(() => {
-        const answer = whatIfTextarea.value.trim();
-        if (answer) {
-          submitAnswer(currentQuestion, answer);
-        }
-      })
-    );
-  }
+  // Tambahkan listener Enter ke semua field input
+  document
+    .getElementById("textAnswerField")
+    ?.addEventListener("keypress", handleEnterKey);
+  document
+    .getElementById("whatIfAnswer")
+    ?.addEventListener("keypress", handleEnterKey);
+  document
+    .getElementById("mathAnswerField")
+    ?.addEventListener("keypress", handleEnterKey);
+  document
+    .getElementById("whatIfMathField")
+    ?.addEventListener("keypress", handleEnterKey);
 });
 
 // ===== Initial =====

@@ -132,91 +132,106 @@
     {
       "id": "S-ES-01",
       "question": "Tuliskan ruang sampel dari pelemparan dua koin!",
-      "answer": "{AA, AG, GA, GG}",
+      "answer": "n(S) = {AA, AG, GA, GG}",
+      "input_type": "set",
       "time_limit": 60
     },
     {
       "id": "S-ES-02",
       "question": "Tentukan peluang muncul tepat satu gambar dari dua kali pelemparan koin!",
-      "answer": "2/4 = 1/2",
+      "answer": "P = \\frac{2}{4} = \\frac{1}{2}",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-03",
       "question": "Sebuah dadu dilempar satu kali. Tentukan peluang muncul angka lebih dari 4!",
-      "answer": "2/6 = 1/3",
+      "answer": "P = \\frac{2}{6} = \\frac{1}{3}",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-04",
       "question": "Jelaskan perbedaan kejadian saling lepas dan tidak saling lepas!",
       "answer": "Saling lepas tidak dapat terjadi bersamaan, tidak saling lepas dapat terjadi bersamaan.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "S-ES-05",
       "question": "Dalam sebuah kotak terdapat 5 bola merah dan 3 bola putih. Tentukan peluang terambil bola putih!",
-      "answer": "3/8",
+      "answer": "P = \\frac{3}{8}",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-06",
       "question": "Suatu koin dilempar 100 kali. Tentukan frekuensi harapan muncul gambar!",
-      "answer": "100 × 1/2 = 50",
+      "answer": "Fh = 100 \\times \\frac{1}{2} = 50",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-07",
       "question": "Dari angka 1 sampai 12, diambil satu angka secara acak. Tentukan peluang terambil angka kelipatan 3!",
-      "answer": "4/12 = 1/3",
+      "answer": "P = \\frac{4}{12} = \\frac{1}{3}",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-08",
       "question": "Apakah kejadian “muncul angka 4” dan “muncul angka genap” saling lepas? Jelaskan!",
-      "answer": "Tidak, karena angka 4 termasuk genap sehingga dapat terjadi bersamaan.",
+      "answer": "Tidak, karena angka 4 termasuk genap.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "S-ES-09",
       "question": "Jika peluang suatu kejadian adalah 0,2, apa arti peluang tersebut?",
       "answer": "Kejadian jarang terjadi.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "S-ES-10",
       "question": "Jelaskan arti peluang bernilai 0 dan 1!",
       "answer": "0 berarti tidak mungkin, 1 berarti pasti.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "S-ES-11",
       "question": "Sebuah dadu dilempar satu kali. Tentukan peluang muncul angka kurang dari 7!",
-      "answer": "6/6 = 1",
+      "answer": "P = \\frac{6}{6} = 1",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-12",
       "question": "Dari 40 siswa, 10 siswa suka matematika. Tentukan peluang terpilih siswa yang suka matematika!",
-      "answer": "10/40 = 1/4",
+      "answer": "P = \\frac{10}{40} = \\frac{1}{4}",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-13",
       "question": "Sebuah dadu dilempar 150 kali. Tentukan frekuensi harapan muncul angka 5!",
-      "answer": "150 × 1/6 = 25",
+      "answer": "Fh = 150 \\times \\frac{1}{6} = 25",
+      "input_type": "math",
       "time_limit": 60
     },
     {
       "id": "S-ES-14",
       "question": "Tuliskan contoh kejadian tidak saling lepas!",
       "answer": "Muncul angka genap dan muncul angka kelipatan 2 pada dadu.",
+      "input_type": "text",
       "time_limit": 60
     },
     {
       "id": "S-ES-15",
       "question": "Tentukan peluang muncul angka ganjil atau kelipatan 3 pada satu kali pelemparan dadu!",
-      "answer": "Gabungan {1,3,5,6} → 4/6 = 2/3",
+      "answer": "Ganjil {1,3,5}, kelipatan 3 {3,6}. Gabungan {1,3,5,6} = \\frac{4}{6} = \\frac{2}{3}",
+      "input_type": "math",
       "time_limit": 60
     }
   ]

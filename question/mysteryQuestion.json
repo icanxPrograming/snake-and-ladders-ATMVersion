@@ -166,60 +166,70 @@
       "id": "M-WI-01",
       "question": "Jika sebuah kejadian dikatakan hampir pasti, maka peluangnya berada di …",
       "answer": "Antara 0 dan 1 (mendekati 1)",
+      "input_type": "text",
       "time_limit": 30
     },
     {
       "id": "M-WI-02",
       "question": "Jika suatu kejadian tidak mustahil dan tidak pasti, maka nilai peluangnya …",
       "answer": "0 < P < 1",
+      "input_type": "math",
       "time_limit": 30
     },
     {
       "id": "M-WI-03",
       "question": "Jika dua kejadian selalu muncul bersamaan, maka hubungannya adalah …",
-      "answer": "Saling bergantung / identik",
+      "answer": "Saling bergantung",
+      "input_type": "text",
       "time_limit": 30
     },
     {
       "id": "M-WI-04",
       "question": "Jika suatu kejadian selalu terjadi, maka peluangnya adalah …",
       "answer": "1",
+      "input_type": "math",
       "time_limit": 30
     },
     {
       "id": "M-WI-05",
       "question": "Jika suatu kejadian tidak pernah muncul, maka peluang teoritisnya adalah …",
       "answer": "0",
+      "input_type": "math",
       "time_limit": 30
     },
     {
       "id": "M-WI-06",
       "question": "Jika peluang A lebih besar dari peluang bukan A, maka kejadian A …",
       "answer": "Lebih mungkin terjadi",
+      "input_type": "text",
       "time_limit": 30
     },
     {
       "id": "M-WI-07",
       "question": "Jika dua kejadian tidak pernah muncul bersama, maka sifatnya …",
       "answer": "Saling lepas",
+      "input_type": "text",
       "time_limit": 30
     },
     {
       "id": "M-WI-08",
       "question": "Jika hasil percobaan sudah diketahui, maka peluang hasil tersebut adalah …",
       "answer": "1",
+      "input_type": "math",
       "time_limit": 30
     },
     {
       "id": "M-WI-09",
       "question": "Peluang yang dihitung setelah hasil lain diketahui disebut …",
       "answer": "Peluang bersyarat",
+      "input_type": "text",
       "time_limit": 30
     },
     {
       "id": "M-WI-10",
       "question": "Jika dua kejadian tidak memengaruhi satu sama lain, maka hubungannya …",
       "answer": "Saling bebas",
+      "input_type": "text",
       "time_limit": 30
     }
   ]

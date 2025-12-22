@@ -30,10 +30,11 @@ button:hover {
   align-items: center;
 }
 .bigBoard {
-  width: calc(var(--box) * 10);
-  max-width: 100%;
-  aspect-ratio: 1;
+  /* Papan akan selebar layar (dengan padding) tapi maksimal 600px */
+  width: min(95vw, 600px);
+  aspect-ratio: 1 / 1;
   position: relative;
+  margin: 0 auto;
 }
 .gamePlayers {
   flex: 1;
@@ -41,33 +42,86 @@ button:hover {
 }
 .playersBox {
   background-color: #ffffff6b;
-  height: 100%;
   border-radius: 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
   padding: 24px;
+
+  /* GUNAKAN GRID UNTUK DESKTOP */
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr); /* Pastikan 2 kolom sejajar */
+  grid-template-rows: auto auto; /* 2 baris */
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px; /* Batas lebar supaya tidak terlalu melar di monitor besar */
+  margin: 0 auto;
 }
+
 .playerCard {
-  border-radius: 12px;
-  background-color: #ffffff88;
-  padding: 24px;
+  border-radius: 16px;
+  background-color: #ffffffaa;
+  padding: 20px;
+  width: 100%; /* Mengikuti lebar kolom grid */
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
+
+/* Mengatur urutan khusus jika pemain berjumlah 4 (P1, P2 atas - P4, P3 bawah) */
+#playerCard1 {
+  order: 1;
+}
+#playerCard2 {
+  order: 2;
+}
+#playerCard4 {
+  order: 3;
+} /* P4 di kiri bawah */
+#playerCard3 {
+  order: 4;
+} /* P3 di kanan bawah */
+
+/* MEDIA QUERY UNTUK MOBILE (Kembali ke 1 kolom) */
+@media only screen and (max-width: 768px) {
+  .playersBox {
+    grid-template-columns: 1fr; /* 1 kolom saja di HP */
+  }
+
+  /* Kembalikan urutan normal di HP agar user tidak bingung */
+  #playerCard3 {
+    order: 3;
+  }
+  #playerCard4 {
+    order: 4;
+  }
+}
+
+/* Penyesuaian konten dalam card */
 .level1 {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
+
 .level1 img {
-  width: 120px;
-  aspect-ratio: 1;
-  border-radius: 100%;
+  width: 100px; /* Ukuran avatar lebih konsisten */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .diceBox {
-  width: 120px;
-  aspect-ratio: 1;
+  width: 100px;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background: rgba(255, 255, 255, 0.5); */
+  border-radius: 12px;
 }
 .diceBox:hover {
   cursor: pointer;
@@ -102,53 +156,51 @@ button:hover {
 }
 .level2 {
   width: 100%;
-  margin: 16px 0 0 0;
+  margin-top: 15px;
 }
+
 .level2 div {
-  background-color: #ffffff88;
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
+  background-color: #ffffffcc;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
   font-size: 20px;
-  letter-spacing: 1px;
-  font-weight: normal;
+  font-weight: bold;
 }
 .board {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
-  width: 600px;
-  max-width: 100%;
-  aspect-ratio: 1;
-  box-shadow: -9px -9px 20px 5px rgba(0, 0, 0, 0.1),
-    9px 9px 20px 5px rgba(0, 0, 0, 0.1);
+  object-fit: fill; /* Memastikan gambar memenuhi kontainer kotak */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .potsBoard {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 2;
-  width: calc(var(--box) * 10);
-  max-width: 100%;
-  aspect-ratio: 1;
   display: grid;
+  /* KUNCI: Bagi menjadi 10 kolom & 10 baris secara otomatis */
   grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
 }
 
 .box {
-  max-width: 100%;
-  aspect-ratio: 1;
-  width: min(100%, 60px);
-  flex-wrap: wrap;
-  font-size: 10px;
-  font-weight: 700;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4px;
-  /* border: 1px solid; */
+  /* Hilangkan width kaku agar tidak out of board */
+  padding: 0;
+  position: relative;
+  font-size: min(2.5vw, 12px); /* Ukuran angka ikut mengecil di HP */
 }
 .pot {
   width: calc(var(--box) / 3);
@@ -310,7 +362,7 @@ button:hover {
 }
 @media only screen and (max-width: 700px) {
   .boardArea {
-    padding: 0px;
+    padding: 10px;
   }
   .gamePlayers {
     padding: 0px;
@@ -320,26 +372,41 @@ button:hover {
     width: 100%;
   }
   .playersBox {
-    border-radius: 0;
-    gap: 6px;
-    padding: 6px;
-    overflow: hidden;
+    padding: 10px;
+    gap: 10px;
+    display: grid; /* Kembali ke grid untuk layar kecil agar rapi */
+    grid-template-columns: 1fr 1fr;
   }
+
   .playerCard {
-    border-radius: 0px;
+    min-height: auto;
     padding: 12px;
+    flex: none;
+    max-width: none;
+    min-width: 0;
   }
+
+  /* Khusus 2 player di mobile, biarkan tetap 2 kolom */
+  .playersBox > div:nth-last-child(2):first-child,
+  .playersBox > div:nth-last-child(2):first-child ~ div {
+    flex: none;
+    width: 100%;
+  }
+
   .level1 img {
-    width: 64px;
+    width: 60px;
+    height: 60px;
   }
+
   .diceBox {
-    width: 40px;
+    width: 60px;
+    height: 60px;
   }
   .diceBox:hover {
     cursor: pointer;
   }
   .diceImg {
-    font-size: 40px;
+    font-size: 45px;
   }
   .level2 {
     width: 100%;
@@ -347,9 +414,9 @@ button:hover {
   }
   .level2 div {
     background-color: unset;
-    padding: 4px 8px;
+    padding: 8px;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -1589,5 +1656,115 @@ button:hover {
   .timer {
     font-size: 20px;
     padding: 8px 15px;
+  }
+}
+
+/* Gaya Tombol Info */
+.info-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.info-btn:hover {
+  transform: scale(1.1);
+  background: #2980b9;
+}
+
+/* Tata letak item info */
+.info-item {
+  display: flex;
+  align-items: center; /* Sejajarkan kotak warna dengan teks title */
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.info-item:last-of-type {
+  border-bottom: none;
+}
+
+.info-color {
+  min-width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.info-text {
+  flex: 1;
+}
+
+.info-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50; /* Biru Gelap - sangat mudah dibaca */
+  margin-bottom: 4px;
+}
+
+.info-item p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #444; /* Abu-abu gelap untuk deskripsi */
+  font-family: sans-serif;
+}
+
+/* Bagian Reward untuk Mystery */
+.info-reward {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.correct-text {
+  color: #218c53; /* Hijau yang lebih gelap agar terbaca jelas */
+}
+
+.wrong-text {
+  color: #c0392b; /* Merah yang lebih gelap agar terbaca jelas */
+}
+
+#rotate-warning {
+  display: none; /* Sembunyikan secara default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2c3e50;
+  color: white;
+  z-index: 9999;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Hanya munculkan jika HP dalam mode Portrait */
+@media screen and (orientation: portrait) and (max-width: 900px) {
+  #rotate-warning {
+    display: flex;
+  }
+  body {
+    overflow: hidden; /* Kunci scrolling */
   }
 }
