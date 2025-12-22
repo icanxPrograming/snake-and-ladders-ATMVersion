@@ -1,7 +1,3 @@
-Berikut adalah draf `README.md` yang profesional, informatif, dan terstruktur untuk proyek GitHub Anda. Saya telah menyertakan semua fitur yang telah kita bahas (Peluang, Statistik, BGM, Storm, dll.) serta bagian kredit khusus.
-
----
-
 # 🐍 Petualangan Probabilitas: Ular & Tangga (Math Edition)
 
 Sebuah permainan edukasi interaktif berbasis web yang menggabungkan mekanisme klasik Ular Tangga dengan tantangan Matematika (Materi Peluang). Proyek ini dirancang untuk membuat belajar probabilitas menjadi lebih seru dan kompetitif.
