@@ -1771,9 +1771,9 @@ button:hover {
 
 /* RESPONSIVE: Saat layar < 900px (Layar Tablet/HP) */
 @media screen and (max-width: 992px) {
-  #screen3 {
+  /* #screen3 {
     flex-direction: column;
-  }
+  } */
 
   /* Pindahkan BGM ke Kiri */
   .music-btn-global {
@@ -1814,13 +1814,5 @@ button:hover {
 
   .storm-bar-bg {
     display: none; /* Sembunyikan progress bar di mobile agar ringkas */
-  }
-}
-
-/* RESPONSIVE: Jika sangat kecil (HP Portrait) */
-@media screen and (max-width: 480px) {
-  .storm-ui-box {
-    transform: scale(0.65); /* Perkecil seluruh kotak */
-    margin-bottom: 0;
   }
 }
