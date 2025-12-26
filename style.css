@@ -348,7 +348,7 @@ button:hover {
   width: 100%;
   min-height: 100dvh;
   padding: 16px;
-  background-image: url("images/screen1.png");
+  background-image: url("images/ScreenSunda.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -426,7 +426,7 @@ button:hover {
 
 .s1-card {
   backdrop-filter: blur(2px);
-  background-color: #ffffff6b;
+  background-color: #ffffffa2;
   width: min(680px, 100%);
   padding: 32px;
   margin: 32px auto;

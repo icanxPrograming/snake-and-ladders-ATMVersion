@@ -6,7 +6,7 @@
     <title>Math Snakes and Ladders Game</title>
     <link rel="stylesheet" href="style.css" />
     <!-- Icon -->
-    <link rel="icon" type="image/x-icon" href="images/icon.png" />
+    <link rel="icon" type="image/x-icon" href="images/iconTitle.png" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
@@ -339,8 +339,14 @@
         <hr style="width: 80%; margin: 20px auto; opacity: 0.3" />
 
         <div class="difficulty-selection">
-          <h3 style="margin-bottom: 15px; font-family: sans-serif">
+          <h3 style="margin-bottom: 15px">
             Pilih Tingkat Kesulitan Game:
+            <span
+              class="material-symbols-outlined"
+              onclick="openDifficultyInfo()"
+              style="cursor: pointer; color: #3498db; font-size: 25px"
+              >info</span
+            >
           </h3>
           <div class="choose" style="justify-content: center; gap: 15px">
             <div
@@ -447,7 +453,7 @@
         </div>
       </div>
     </div>
-    <div class="modal hide" id="modal">
+    <!-- <div class="modal hide" id="modal">
       <div class="modalBody">
         <img src="images/avatars/0.png" id="wimg" />
         <h1>Winner is <span id="wname"></span></h1>
@@ -455,15 +461,55 @@
           New Game
         </button>
       </div>
-    </div>
+    </div> -->
     <audio src="audio/drop.mp3" id="drop" style="display: none"></audio>
     <audio src="audio/ladder.mp3" id="ladder" style="display: none"></audio>
     <audio src="audio/snake.mp3" id="snake" style="display: none"></audio>
     <audio src="audio/dice.mp3" id="diceAudio" style="display: none"></audio>
     <audio src="audio/success.mp3" id="success" style="display: none"></audio>
     <audio id="bgmAudio" loop>
-      <source src="audio/BGM.mp3" type="audio/mpeg" />
+      <source src="audio/Sunda.mp3" type="audio/mpeg" />
     </audio>
+
+    <div class="modal hide" id="difficultyInfoModal">
+      <div class="modalBody" style="max-width: 500px; text-align: left">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px">
+          Detail Kesulitan 🎮
+        </h2>
+
+        <div style="margin-bottom: 15px">
+          <strong style="color: #27ae60">🟢 Mode Mudah (Easy)</strong>
+          <p style="font-size: 14px; color: #555">
+            Didominasi oleh kotak hijau. Soal peluang dasar yang sederhana
+            (seperti pelemparan 1 koin/dadu). Sangat cocok untuk pemanasan.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <strong style="color: #f39c12">🟡 Mode Standar (Standard)</strong>
+          <p style="font-size: 14px; color: #555">
+            Keseimbangan antara soal mudah dan menengah. Muncul variasi soal
+            pelemparan 2 dadu atau pengambilan kartu sederhana.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <strong style="color: #e74c3c">🔴 Mode Sulit (Hard)</strong>
+          <p style="font-size: 14px; color: #555">
+            Kotak merah lebih banyak muncul. Tantangan peluang tingkat lanjut
+            (peluang bersyarat, frekuensi harapan kompleks, dan soal analisis).
+          </p>
+        </div>
+
+        <button
+          class="startBtn"
+          onclick="closeDifficultyInfo()"
+          style="width: 100%; margin-top: 10px"
+        >
+          OK, MENGERTI
+        </button>
+      </div>
+    </div>
 
     <div class="modal hide" id="guideModal">
       <div
@@ -584,132 +630,210 @@
       <div
         class="modalBody"
         style="
-          max-width: 600px;
-          padding: 0;
-          background: transparent;
+          max-width: 800px;
+          padding: 20px;
+          background: #f8f9fa;
+          border-radius: 20px;
           border: none;
         "
       >
-        <div
-          id="certificateExportArea"
-          style="
-            background: white;
-            padding: 40px;
-            border: 15px double #d4af37;
-            text-align: center;
-            font-family: 'Georgia', serif;
-            position: relative;
-          "
-        >
-          <div style="font-size: 60px; color: #d4af37; margin-bottom: 10px">
-            🏅
-          </div>
-          <h1
-            style="
-              margin: 0;
-              color: #2c3e50;
-              letter-spacing: 3px;
-              font-size: 28px;
-              text-transform: uppercase;
-            "
-          >
-            Sertifikat Penghargaan
+        <div id="leaderboardSection">
+          <h1 style="color: #2c3e50; margin-bottom: 20px; font-size: 24px">
+            📊 Klasemen & Statistik Akhir
           </h1>
-          <p
-            style="
-              margin: 15px 0 5px;
-              font-style: italic;
-              color: #7f8c8d;
-              font-size: 18px;
-            "
-          >
-            Dengan bangga diberikan kepada:
-          </p>
-          <h2
-            id="certName"
-            style="
-              font-size: 38px;
-              color: #2980b9;
-              margin: 10px 0;
-              border-bottom: 3px double #eee;
-              display: inline-block;
-              padding: 0 30px;
-            "
-          >
-            NAMA PEMAIN
-          </h2>
-          <p style="margin: 20px 0 10px; font-size: 16px; color: #34495e">
-            Atas keberhasilan menyelesaikan seluruh tantangan dengan gelar
-            kehormatan:
-          </p>
-          <h3
-            id="certTitle"
-            style="
-              font-size: 24px;
-              color: #27ae60;
-              background: #f9f9f9;
-              padding: 12px;
-              border-radius: 50px;
-              display: inline-block;
-              min-width: 300px;
-              border: 1px solid #27ae60;
-            "
-          >
-            GELAR PEMAIN
-          </h3>
 
           <div
             style="
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 15px;
-              margin-top: 30px;
-              text-align: left;
-              background: #fffcf0;
-              padding: 20px;
-              border: 1px solid #f1c40f;
-              border-radius: 12px;
+              background: white;
+              border-radius: 15px;
+              padding: 15px;
+              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+              overflow-x: auto;
             "
           >
-            <div style="font-size: 15px">
-              ✅ Jawaban Benar: <strong id="statCorrect">0</strong>
-            </div>
-            <div style="font-size: 15px">
-              🔥 Streak Tertinggi: <strong id="statStreak">0</strong>
-            </div>
-            <div style="font-size: 15px">
-              🚩 Tangga Dilewati: <strong id="statLadders">0</strong>
-            </div>
-            <div style="font-size: 15px">
-              🐍 Ular Dihadapi: <strong id="statSnakes">0</strong>
-            </div>
+            <table
+              style="
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+                font-family: sans-serif;
+              "
+            >
+              <thead>
+                <tr style="background: #34495e; color: white">
+                  <th style="padding: 12px; border-radius: 10px 0 0 10px">
+                    Pemain
+                  </th>
+                  <th style="padding: 12px">Skor</th>
+                  <th style="padding: 12px">Benar</th>
+                  <th style="padding: 12px">Streak</th>
+                  <th style="padding: 12px; border-radius: 0 10px 10px 0">
+                    🪜 / 🐍
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="allPlayersStatsBody"></tbody>
+            </table>
           </div>
 
-          <p style="margin-top: 20px; font-size: 12px; color: #bdc3c7">
-            Diterbitkan oleh Developer Ular Tangga Matematika.
-          </p>
+          <div
+            style="
+              margin-top: 25px;
+              display: flex;
+              gap: 10px;
+              justify-content: center;
+            "
+          >
+            <button
+              class="startBtn"
+              onclick="toggleToCertificate()"
+              style="background: #e67e22; width: auto; padding: 0 25px"
+            >
+              Klaim Sertifikat Pemenang 🏆
+            </button>
+          </div>
         </div>
 
-        <div
-          style="
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            padding-bottom: 20px;
-          "
-        >
-          <button
-            class="startBtn"
-            onclick="downloadCertificate()"
-            style="background: #27ae60"
+        <div id="certificateSection" class="hide">
+          <div
+            id="certificateExportArea"
+            style="
+              background: white;
+              padding: 40px;
+              border: 15px double #d4af37;
+              text-align: center;
+              font-family: 'Georgia', serif;
+              position: relative;
+              color: #333;
+            "
           >
-            Unduh PNG
-          </button>
-          <button class="startBtn" onclick="window.location.reload()">
-            Main Lagi
-          </button>
+            <div style="font-size: 60px; color: #d4af37; margin-bottom: 10px">
+              🏅
+            </div>
+            <h1
+              style="
+                margin: 0;
+                color: #2c3e50;
+                letter-spacing: 3px;
+                font-size: 28px;
+                text-transform: uppercase;
+              "
+            >
+              Sertifikat Penghargaan
+            </h1>
+            <p
+              style="
+                margin: 15px 0 5px;
+                font-style: italic;
+                color: #7f8c8d;
+                font-size: 18px;
+              "
+            >
+              Dengan bangga diberikan kepada:
+            </p>
+            <h2
+              id="certName"
+              style="
+                font-size: 38px;
+                color: #2980b9;
+                margin: 10px 0;
+                border-bottom: 3px double #eee;
+                display: inline-block;
+                padding: 0 30px;
+              "
+            >
+              NAMA PEMAIN
+            </h2>
+            <p style="margin: 20px 0 10px; font-size: 16px; color: #34495e">
+              Atas keberhasilan menyelesaikan seluruh tantangan dengan gelar:
+            </p>
+            <h3
+              id="certTitle"
+              style="
+                font-size: 22px;
+                color: #27ae60;
+                background: #f9f9f9;
+                padding: 12px;
+                border-radius: 50px;
+                display: inline-block;
+                min-width: 300px;
+                border: 1px solid #27ae60;
+              "
+            >
+              GELAR PEMAIN
+            </h3>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 30px;
+                text-align: left;
+                background: #fffcf0;
+                padding: 15px;
+                border: 1px solid #f1c40f;
+                border-radius: 12px;
+                font-family: sans-serif;
+              "
+            >
+              <div style="font-size: 14px">
+                ✅ Benar: <strong id="winnerCorrect">0</strong>
+              </div>
+              <div style="font-size: 14px">
+                🔥 Streak: <strong id="winnerStreak">0</strong>
+              </div>
+              <div style="font-size: 14px">
+                🪜 Tangga: <strong id="winnerLadders">0</strong>
+              </div>
+              <div style="font-size: 14px">
+                🐍 Ular: <strong id="winnerSnakes">0</strong>
+              </div>
+            </div>
+            <p
+              style="
+                margin-top: 20px;
+                font-size: 11px;
+                color: #bdc3c7;
+                font-family: sans-serif;
+              "
+            >
+              Diterbitkan oleh Developer Ular Tangga Matematika.
+            </p>
+          </div>
+
+          <div
+            style="
+              margin-top: 20px;
+              display: flex;
+              gap: 10px;
+              justify-content: center;
+            "
+          >
+            <button
+              class="startBtn"
+              onclick="downloadCertificate()"
+              style="background: #27ae60; width: auto; padding: 0 20px"
+            >
+              Unduh PNG
+            </button>
+            <button
+              class="startBtn"
+              onclick="toggleToLeaderboard()"
+              style="background: #7f8c8d; width: auto; padding: 0 20px"
+            >
+              Lihat Statistik Lagi
+            </button>
+          </div>
         </div>
+
+        <button
+          class="startBtn"
+          onclick="window.location.reload()"
+          style="background: #e74c3c; width: 100%; margin-top: 20px"
+        >
+          Main Lagi / Reset Game
+        </button>
       </div>
     </div>
 
@@ -718,6 +842,24 @@
         <h1 style="text-align: center; margin-bottom: 25px; color: #2c3e50">
           Informasi Kotak
         </h1>
+
+        <div class="info-item">
+          <div
+            class="info-color"
+            style="
+              background: linear-gradient(135deg, #f4fdd0 50%, #9cdcdc 50%);
+              border: 1px solid #ccc;
+            "
+          ></div>
+          <div class="info-text">
+            <span class="info-title">Kotak Putih / Biru Muda (Bebas)</span>
+            <p>
+              Merupakan kotak aman atau <i>Free Box</i>. Tidak ada tantangan
+              soal di kotak ini. Pemain bisa langsung beristirahat dan menunggu
+              giliran berikutnya.
+            </p>
+          </div>
+        </div>
 
         <div class="info-item">
           <div class="info-color tile-easy"></div>
@@ -772,7 +914,7 @@
             <span class="info-title">Probability Storm (Event)</span>
             <p>
               Muncul secara berkala. Semua pemain akan diberikan satu soal yang
-              sama untuk dijawab secara bergantian.
+              berbeda untuk dijawab secara bergantian.
             </p>
             <div class="info-reward">
               <span class="correct-text"
