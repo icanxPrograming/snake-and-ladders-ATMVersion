@@ -390,10 +390,14 @@ const closeGuideModal = () => {
 // Ambil elemen BGM
 const bgm = document.getElementById("bgmAudio");
 const musicIcon = document.getElementById("musicIcon");
+const countdownAudio = document.getElementById("countdownAudio");
+const sirineAudio = document.getElementById("sirineAudio");
 let isMusicPlaying = false;
 
-// Atur volume BGM agar tidak menabrak sound effect lain (0.3 = 30% volume)
-bgm.volume = 0.1;
+// Set volume rendah (0.1 atau 0.05 sesuai permintaan)
+if (countdownAudio) countdownAudio.volume = 0.1;
+if (sirineAudio) sirineAudio.volume = 0.1;
+if (bgm) bgm.volume = 0.1;
 
 const toggleMusic = () => {
   if (isMusicPlaying) {
@@ -1070,8 +1074,13 @@ const submitAnswer = (question, answer) => {
           true,
           `${players[currentPlayerTemp - 1].name} BERHASIL! Maju 3 Langkah.`
         );
+        // TRIGGER MUSIK: Beri jeda 100ms agar modal muncul dulu baru musik fade out
+        setTimeout(() => {
+          resetToSundaBGM();
+        }, 100);
         isProcessingAnswer = true;
         setTimeout(() => {
+          finishStorm(true);
           closeResultModal();
           movePot(3, currentPlayerTemp, true);
         }, 2000);
@@ -2041,11 +2050,30 @@ const initialState = () => {
   );
 };
 
-// Variabel tambahan untuk UI
-// Ganti bagian ini agar interval menjadi 3 menit (180 detik)
-let stormTimeRemaining = 180;
-const TOTAL_STORM_TIME = 180; // 3 menit dalam detik
-const STORM_INTERVAL = 3 * 60 * 1000; // Dalam milidetik (Opsional, untuk logika interval lain)
+// Variabel tambahan untuk UI (Disesuaikan menjadi 50 detik untuk pengujian)
+let stormTimeRemaining = 50;
+const TOTAL_STORM_TIME = 50; // Total waktu siklus badai dalam detik
+const STORM_INTERVAL = 50 * 1000; // Dalam milidetik
+
+const fadeAudio = (audioElement, targetVolume, duration = 1000) => {
+  if (!audioElement) return;
+
+  const startVolume = audioElement.volume;
+  const diff = targetVolume - startVolume;
+  const steps = 20; // Jumlah perubahan volume
+  const stepTime = duration / steps;
+  let currentStep = 0;
+
+  const fadeInterval = setInterval(() => {
+    currentStep++;
+    audioElement.volume = startVolume + diff * (currentStep / steps);
+
+    if (currentStep >= steps) {
+      audioElement.volume = targetVolume;
+      clearInterval(fadeInterval);
+    }
+  }, stepTime);
+};
 
 const startStormCountdown = () => {
   if (stormTimer) clearInterval(stormTimer);
@@ -2096,7 +2124,17 @@ const updateStormUI = () => {
   // Beri efek warning jika waktu < 30 detik
   const container = document.getElementById("stormTimerContainer");
   if (container) {
-    if (stormTimeRemaining <= 30) {
+    // Tepat saat 30 detik menuju badai
+    if (stormTimeRemaining === 30 && !isStormActive) {
+      if (countdownAudio && countdownAudio.paused) {
+        countdownAudio.currentTime = 0;
+        countdownAudio.play().catch((e) => console.log("Audio play blocked"));
+      }
+      // Opsional: Kecilkan sedikit BGM Sunda saat countdown dimulai
+      if (bgm) bgm.volume = 0.03;
+    }
+
+    if (stormTimeRemaining <= 30 && stormTimeRemaining > 0) {
       container.classList.add("storm-warning");
     } else {
       container.classList.remove("storm-warning");
@@ -2108,6 +2146,45 @@ const triggerProbabilityStorm = () => {
   console.log("PROBABILITY STORM STARTED!");
   isStormActive = true;
   disableAllDices();
+
+  // Matikan countdown
+  if (countdownAudio) {
+    countdownAudio.pause();
+    countdownAudio.currentTime = 0;
+  }
+
+  // 1. Mainkan Sirine (Volume 0.1)
+  if (sirineAudio) {
+    sirineAudio.volume = 0.1;
+    sirineAudio.currentTime = 0;
+    sirineAudio.play();
+
+    // Buat sirine memudar (fade out) setelah 2 detik
+    setTimeout(() => {
+      fadeAudio(sirineAudio, 0, 1000);
+    }, 2000);
+
+    // Stop total sirine setelah 3 detik
+    setTimeout(() => {
+      sirineAudio.pause();
+    }, 3000);
+  }
+
+  // 2. Mainkan Sabilulungan SETELAH sirine berjalan (delay 2 detik)
+  if (bgm) {
+    // Fade out lagu lama (Sunda)
+    fadeAudio(bgm, 0, 500);
+
+    setTimeout(() => {
+      bgm.src = "audio/Sabilulungan.mp3";
+      bgm.load();
+      bgm.volume = 0; // Mulai dari 0
+      bgm.play().catch((e) => console.log("Play blocked"));
+
+      // Masuk perlahan (Fade In) tepat saat sirine meredup
+      fadeAudio(bgm, 0.1, 1500);
+    }, 2000); // Jeda 2 detik agar pas dengan sirine
+  }
 
   // Buat antrean pemain (mulai dari player yang sedang giliran saat ini)
   stormQueue = [];
@@ -2173,7 +2250,7 @@ const processNextStormPlayer = () => {
 
 const startStormQuestionTimer = () => {
   const timerEl = document.getElementById("timer");
-  let timeLeft = 20; // Waktu lebih singkat untuk storm
+  let timeLeft = 30; // Waktu lebih singkat untuk storm
   timerEl.textContent = timeLeft;
 
   if (questionTimer) clearInterval(questionTimer);
@@ -2206,17 +2283,39 @@ const handleStormTimeout = () => {
   }, 2000);
 };
 
+const resetToSundaBGM = () => {
+  if (bgm) {
+    // 1. Fade Out Sabilulungan (600ms) - lebih terasa "melenyap"
+    fadeAudio(bgm, 0, 600);
+
+    setTimeout(() => {
+      bgm.src = "audio/Sunda.mp3";
+      bgm.load();
+      bgm.volume = 0;
+      bgm
+        .play()
+        .then(() => {
+          // 2. Fade In Sunda (800ms) - masuk perlahan dengan cantik
+          fadeAudio(bgm, 0.1, 800);
+        })
+        .catch((e) => console.log("Audio play blocked"));
+    }, 650); // Jeda sedikit lebih lama dari durasi fade out
+  }
+};
+
 const finishStorm = (isSuccess) => {
   isStormActive = false;
   isProcessingAnswer = false;
-  isRolling = false; // Buka kunci rolling
+  isRolling = false;
   if (questionTimer) clearInterval(questionTimer);
 
+  // Jika badai berakhir karena waktu habis atau semua salah, baru ganti musik di sini
   if (!isSuccess) {
     showAnswerResult(
       false,
       "Badai berakhir. Tidak ada yang berhasil menjawab."
     );
+    resetToSundaBGM();
   }
 
   const container = document.getElementById("stormTimerContainer");
@@ -2224,7 +2323,6 @@ const finishStorm = (isSuccess) => {
 
   setTimeout(() => {
     closeResultModal();
-    // Kembalikan dadu ke currentTurnPlayer (pemain asli sebelum badai)
     enableCurrentPlayerDice();
     stormTimeRemaining = TOTAL_STORM_TIME;
   }, 2000);
