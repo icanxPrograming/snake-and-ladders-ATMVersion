@@ -2050,10 +2050,10 @@ const initialState = () => {
   );
 };
 
-// Variabel tambahan untuk UI (Disesuaikan menjadi 50 detik untuk pengujian)
-let stormTimeRemaining = 50;
-const TOTAL_STORM_TIME = 50; // Total waktu siklus badai dalam detik
-const STORM_INTERVAL = 50 * 1000; // Dalam milidetik
+// Variabel tambahan untuk UI (Kembali ke durasi standar 3 menit)
+let stormTimeRemaining = 180;
+const TOTAL_STORM_TIME = 180; // 3 menit dalam detik (3 * 60)
+const STORM_INTERVAL = 3 * 60 * 1000; // Dalam milidetik (180.000 ms)
 
 const fadeAudio = (audioElement, targetVolume, duration = 1000) => {
   if (!audioElement) return;
