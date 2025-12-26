@@ -1,7 +1,3 @@
-Berikut adalah revisi **README.md** yang telah disesuaikan dengan penambahan fitur nuansa Sunda, sistem transisi audio yang lebih *smooth*, serta mekanisme *Random Reward* yang baru saja kita implementasikan.
-
----
-
 # 🐍 Petualangan Probabilitas: Ular & Tangga (Math Edition)
 
 Sebuah permainan edukasi interaktif berbasis web yang menggabungkan mekanisme klasik Ular Tangga dengan tantangan Matematika (Materi Peluang) serta sentuhan budaya lokal. Proyek ini dirancang untuk membuat belajar probabilitas menjadi lebih seru, kompetitif, dan memiliki identitas visual serta auditori yang unik.
