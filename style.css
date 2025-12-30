@@ -959,7 +959,7 @@ button:hover {
   }
 
   .playersBox {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
     padding: 10px;
     min-height: auto;
