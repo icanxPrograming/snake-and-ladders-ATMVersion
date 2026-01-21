@@ -17,7 +17,7 @@ Sebuah permainan edukasi interaktif berbasis web yang menggabungkan mekanisme kl
 Proyek ini menyediakan aplikasi pendamping berbasis Android yang berfungsi sebagai alat peraga digital mandiri untuk memvisualisasikan dadu dalam bentuk 3D.
 * **Simulasi Dadu Interaktif**: Memunculkan dadu 3D di dunia nyata melalui kamera smartphone menggunakan teknologi *Image Tracking*.
 * **Randomized Roll**: Tombol lempar yang menghasilkan angka acak 1-6 dengan animasi rotasi dadu yang akurat.
-* **Edukasi Instan**: Setiap hasil lemparan menyertakan penjelasan teks mengenai karakteristik angka (Contoh: Angka genap prima, angka ganjil terkecil, dll).
+* **Edukasi Instan**: Setiap hasil lemparan menyertakan penjelasan teks mengenai karakteristik angka.
 * **Link Materi Terintegrasi**: Tombol khusus yang menghubungkan pengguna ke materi pembelajaran peluang interaktif di YouTube.
 
 ### 🌪️ Probability Storm (Badai Probabilitas)
