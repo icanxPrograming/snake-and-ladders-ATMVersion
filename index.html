@@ -176,6 +176,38 @@
           right: 70px; /* Penyesuaian jarak di HP */
         }
       }
+
+      /* Perbaikan responsif untuk layar kecil */
+      @media screen and (max-width: 450px) {
+        #certificateExportArea {
+          padding: 20px !important; /* Mengurangi padding agar konten punya ruang */
+          border-width: 8px !important; /* Memperkecil border agar tidak makan tempat */
+        }
+
+        #certificateExportArea h1 {
+          font-size: 20px !important; /* Mengecilkan judul agar tidak overflow */
+          letter-spacing: 1px !important;
+        }
+
+        #certName {
+          font-size: 28px !important; /* Mengecilkan nama pemain */
+          padding: 0 10px !important;
+        }
+
+        #certTitle {
+          min-width: unset !important; /* Menghapus batas minimal 300px */
+          width: 90%; /* Mengikuti lebar layar */
+          font-size: 18px !important;
+          padding: 10px !important;
+          display: block !important; /* Agar bergeser ke bawah jika perlu */
+          margin: 10px auto !important;
+        }
+
+        #certificateExportArea div[style*="grid"] {
+          grid-template-columns: 1fr !important; /* Mengubah statistik jadi 1 kolom jika masih sempit */
+          gap: 5px !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -224,6 +256,7 @@
             background: #00a8ff;
             margin-top: 10px;
             font-weight: bold;
+            font-size: 15px;
             border: 2px solid #ffffff44;
             width: 100%; /* Membuat tombol selebar kartu (card) */
             padding: 12px 20px; /* Memberikan ruang lebih di dalam tombol */
@@ -244,6 +277,7 @@
             background: #27ae60;
             margin-top: 10px;
             font-weight: bold;
+            font-size: 15px;
             width: 100%;
             border: 2px solid #ffffff44;
           "
@@ -746,11 +780,14 @@
               font-family: &quot;Georgia&quot;, serif;
               position: relative;
               color: #333;
+              max-width: 500px; /* Tambahan agar tidak terlalu lebar di desktop */
+              margin: 0 auto;
             "
           >
             <div style="font-size: 60px; color: #d4af37; margin-bottom: 10px">
               🏅
             </div>
+
             <h1
               style="
                 margin: 0;
@@ -758,10 +795,12 @@
                 letter-spacing: 3px;
                 font-size: 28px;
                 text-transform: uppercase;
+                word-wrap: break-word;
               "
             >
               Sertifikat Penghargaan
             </h1>
+
             <p
               style="
                 margin: 15px 0 5px;
@@ -772,6 +811,7 @@
             >
               Dengan bangga diberikan kepada:
             </p>
+
             <h2
               id="certName"
               style="
@@ -781,13 +821,17 @@
                 border-bottom: 3px double #eee;
                 display: inline-block;
                 padding: 0 30px;
+                max-width: 100%; /* Mencegah nama panjang meluber */
+                overflow-wrap: break-word;
               "
             >
               NAMA PEMAIN
             </h2>
+
             <p style="margin: 20px 0 10px; font-size: 16px; color: #34495e">
               Atas keberhasilan menyelesaikan seluruh tantangan dengan gelar:
             </p>
+
             <h3
               id="certTitle"
               style="
@@ -797,8 +841,10 @@
                 padding: 12px;
                 border-radius: 50px;
                 display: inline-block;
-                min-width: 300px;
+                min-width: 300px; /* Ini yang akan di-reset oleh CSS Media Query di atas */
+                max-width: 95%; /* Tambahan proteksi */
                 border: 1px solid #27ae60;
+                box-sizing: border-box;
               "
             >
               GELAR PEMAIN
@@ -831,6 +877,7 @@
                 🐍 Ular: <strong id="winnerSnakes">0</strong>
               </div>
             </div>
+
             <p
               style="
                 margin-top: 20px;
@@ -849,19 +896,36 @@
               display: flex;
               gap: 10px;
               justify-content: center;
+              flex-wrap: wrap;
             "
           >
             <button
               class="startBtn"
               onclick="downloadCertificate()"
-              style="background: #27ae60; width: auto; padding: 0 20px"
+              style="
+                background: #27ae60;
+                width: auto;
+                padding: 10px 20px;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              "
             >
               Unduh PNG
             </button>
             <button
               class="startBtn"
               onclick="toggleToLeaderboard()"
-              style="background: #7f8c8d; width: auto; padding: 0 20px"
+              style="
+                background: #7f8c8d;
+                width: auto;
+                padding: 10px 20px;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              "
             >
               Lihat Statistik Lagi
             </button>
